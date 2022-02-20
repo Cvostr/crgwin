@@ -7,7 +7,8 @@ Window::Window(const WindowCreateInfo& create_info) :
 	_create_info(create_info),
 	_client_size(create_info.size),
 	_closed(false),
-	_visible(false)
+	_visible(false),
+	_resizing(false)
 {
 
 }
@@ -18,4 +19,12 @@ const std::string& Window::GetTitle() const {
 
 const crgwin::ivec2& Window::GetSize() const {
 	return _client_size;
+}
+
+bool Window::IsVisible() const {
+	return _visible;
+}
+
+bool Window::IsClosed() const {
+	return _closed;
 }

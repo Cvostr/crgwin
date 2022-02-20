@@ -2,6 +2,7 @@
 
 #include <string>
 #include <base/cgVec2.hpp>
+#include <base/Delegate.hpp>
 
 #define WINDOW_DEFAULT_POS -1000
 
@@ -33,6 +34,10 @@ namespace crgwin {
 		/// </summary>
 		bool fullscreen;
 		/// <summary>
+		/// is window borderless on start
+		/// </summary>
+		bool borderless;
+		/// <summary>
 		/// enable or disable resize
 		/// </summary>
 		bool resize;
@@ -44,6 +49,7 @@ namespace crgwin {
 			max_size = crgwin::ivec2(8192, 4096);
 			position = crgwin::ivec2(WINDOW_DEFAULT_POS, WINDOW_DEFAULT_POS);
 			fullscreen = false;
+			borderless = false;
 			resize = true;
 		}
 	};
@@ -54,6 +60,7 @@ namespace crgwin {
 		bool _maximized;
 		bool _closed;
 		bool _visible;
+		bool _resizing;
 		std::string _title;
 		crgwin::ivec2 _client_size;
 
@@ -61,24 +68,46 @@ namespace crgwin {
 
 	public:
 
+		Function<void, int, int> mouse;
+
 		explicit Window(const WindowCreateInfo& create_info);
 
 		virtual ~Window(){}
-
+		/// <summary>
+		/// Get current window title
+		/// </summary>
+		/// <returns>window title string</returns>
 		const std::string& GetTitle() const;
-
+		/// <summary>
+		/// Set new title to window
+		/// </summary>
+		/// <param name="title">- new title string</param>
 		virtual void SetTitle(const std::string& title) = 0;
 
 		const crgwin::ivec2& GetSize() const;
 
+		virtual crgwin::ivec2 GetWindowPos() = 0;
+
+		virtual void SetWindowPos(crgwin::ivec2 pos) = 0;
+
+		bool IsVisible() const;
+
+		bool IsClosed() const;
+
 		virtual void Show() = 0;
 
 		virtual void Hide() = 0;
-
+		/// <summary>
+		/// Minimize window to taskbar
+		/// </summary>
 		virtual void Minimize() = 0;
-
+		/// <summary>
+		/// Maximize window
+		/// </summary>
 		virtual void Maximize() = 0;
-
+		/// <summary>
+		/// Destroy window
+		/// </summary>
 		virtual void Close() = 0;
 	};
 }

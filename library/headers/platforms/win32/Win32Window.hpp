@@ -19,6 +19,10 @@ namespace crgwin {
 
 		void SetTitle(const std::string& title);
 
+		crgwin::ivec2 GetWindowPos();
+
+		void SetWindowPos(crgwin::ivec2 pos);
+
 		void Show();
 
 		void Hide();

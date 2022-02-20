@@ -3,36 +3,53 @@
 #include "platforms/win32/Win32Utils.hpp"
 #ifdef _WIN32
 #include <windows.h>
-#endif
+#include <dwmapi.h>
 
 using namespace crgwin;
 
 Win32Window::Win32Window(const WindowCreateInfo& create_info) : Window(create_info) {
-	unsigned int win32_style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+    unsigned int win32_style = WS_POPUP,
         win32_ex_style = 0;
+
+    if (!create_info.borderless) {
+        win32_style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
+    }
+    else {
+        win32_style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+        win32_ex_style |= WS_EX_WINDOWEDGE;
+    }
 
     LPCWSTR w_title = CStrToWSTR(_title.c_str());
 
     if (create_info.resize)
-        win32_style |= WS_MAXIMIZEBOX | WS_THICKFRAME;
+        win32_style |= WS_MAXIMIZEBOX | WS_SIZEBOX;
 
     int x = create_info.position.x;
     int y = create_info.position.y;
+    int width = _client_size.x;
+    int height = _client_size.y;
 
     if (x == WINDOW_DEFAULT_POS)
         x = CW_USEDEFAULT;
     if (y == WINDOW_DEFAULT_POS)
         y = CW_USEDEFAULT;
 
-    win32_handle = CreateWindowExW(
+    RECT winRect = { 0, 0, width, height };
+    if (!create_info.borderless) {
+        AdjustWindowRectEx(&winRect, win32_style, FALSE, win32_ex_style);
+        width = winRect.right - winRect.left;
+        height = winRect.bottom - winRect.top;
+    }
+
+    win32_handle = ::CreateWindowExW(
         win32_ex_style,
         WIN32_WIN_CLASS_W,
         w_title,
         win32_style,
         x,
         y,
-        _client_size.x,
-        _client_size.y,
+        width,
+        height,
         nullptr,
         nullptr,
         Win32Platform::GetInstance(),
@@ -41,6 +58,13 @@ Win32Window::Win32Window(const WindowCreateInfo& create_info) : Window(create_in
     if (win32_handle == nullptr)
     {
         return;
+    }
+
+    if (!create_info.borderless) {
+        crgwin::ivec2 pos = this->GetWindowPos();
+        pos.x += winRect.left;
+        pos.y += winRect.top;
+        this->SetWindowPos(pos);
     }
 
     Win32Platform::RegisterWindow(this);
@@ -57,6 +81,43 @@ HWND Win32Window::GetHWND() const {
 LRESULT Win32Window::WndProc(UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg)
     {
+    case WM_SIZE:
+    {
+        if (wParam == SIZE_MINIMIZED){
+           //on window minimized
+        }
+        else if(wParam == SIZE_MAXIMIZED){
+           //on window maximized
+        }
+        else if (wParam == SIZE_RESTORED) {
+            //on size restored
+            if (_resizing) {
+                //window resized by user
+            }
+            else {
+                //window resized by API
+            }
+        }
+        break;
+    }
+    case WM_SETFOCUS:
+        //On got focus function
+        break;
+    case WM_KILLFOCUS:
+        //on lost focus function
+        break;
+    case WM_CLOSE:
+        //on window closed by user
+        Close();
+        return 0;
+    case WM_ENTERSIZEMOVE:
+        //on user resizing window
+        _resizing = true;
+        break;
+    case WM_EXITSIZEMOVE:
+        //on user end resizing window
+        _resizing = false;
+        break;
     }
 
     return DefWindowProcW(win32_handle, msg, wParam, lParam);
@@ -68,6 +129,21 @@ void Win32Window::SetTitle(const std::string& title) {
     {
         _title = title;
     }
+}
+
+crgwin::ivec2 Win32Window::GetWindowPos() {
+    if (!win32_handle)
+        return crgwin::ivec2(-1, -1);
+
+    RECT rect;
+    GetWindowRect(win32_handle, &rect);
+    return crgwin::ivec2(rect.left, rect.top);
+}
+
+void Win32Window::SetWindowPos(crgwin::ivec2 pos) {
+    ::SetWindowPos(win32_handle,
+        nullptr, pos.x, pos.y, 0, 0,
+        SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 }
 
 void Win32Window::Show() {
@@ -102,3 +178,5 @@ void Win32Window::Close() {
         _visible = false;
     }
 }
+
+#endif

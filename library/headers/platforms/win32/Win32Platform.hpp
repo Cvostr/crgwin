@@ -1,5 +1,7 @@
 #pragma once
 
+#include <base/Platform.hpp>
+#include <base/CpuInfo.hpp>
 #include <vector>
 
 struct HINSTANCE__;
@@ -24,7 +26,7 @@ namespace crgwin {
 
 	class Win32Window;
 
-	class Win32Platform {
+	class Win32Platform : public crgwin::Platform {
 	private:
 		static std::vector<Win32Window*> windows;
 	public:
