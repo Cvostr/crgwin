@@ -32,7 +32,7 @@ public:
 	Func function;
 
 	ReturnType operator()(Params ... params) {
-		function(callee, params);
+		function(callee, params ...);
 	}
 };
 

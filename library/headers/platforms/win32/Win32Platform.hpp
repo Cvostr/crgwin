@@ -13,8 +13,8 @@ typedef HINSTANCE HMODULE;
 typedef HWND__* HWND;
 
 typedef unsigned int UINT;
-typedef unsigned __int64 UINT_PTR;
-typedef __int64 LONG_PTR;
+typedef unsigned long long UINT_PTR;
+typedef long long LONG_PTR;
 typedef UINT_PTR            WPARAM;
 typedef LONG_PTR            LPARAM;
 typedef LONG_PTR            LRESULT;
