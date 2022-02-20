@@ -13,6 +13,7 @@ set(HEADER 	headers/base/Platform.hpp
 			headers/base/Window.hpp
 			headers/base/BatteryInfo.hpp
 			headers/base/CpuInfo.hpp
+			headers/base/MemoryInfo.hpp
 			headers/platforms/win32/Win32Window.hpp
 			headers/platforms/win32/Win32Utils.hpp
 			headers/platforms/win32/Win32Platform.hpp)

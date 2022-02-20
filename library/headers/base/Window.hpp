@@ -61,6 +61,7 @@ namespace crgwin {
 		bool _closed;
 		bool _visible;
 		bool _resizing;
+		bool _focused;
 		std::string _title;
 		crgwin::ivec2 _client_size;
 
@@ -74,7 +75,7 @@ namespace crgwin {
 
 		virtual ~Window(){}
 		/// <summary>
-		/// Get current window title
+		/// Gets current window title
 		/// </summary>
 		/// <returns>window title string</returns>
 		const std::string& GetTitle() const;
@@ -85,17 +86,38 @@ namespace crgwin {
 		virtual void SetTitle(const std::string& title) = 0;
 
 		const crgwin::ivec2& GetSize() const;
-
+		/// <summary>
+		/// Gets current window position
+		/// </summary>
+		/// <returns></returns>
 		virtual crgwin::ivec2 GetWindowPos() = 0;
-
+		/// <summary>
+		/// Move window in screen
+		/// </summary>
+		/// <param name="pos">- new position for window</param>
 		virtual void SetWindowPos(crgwin::ivec2 pos) = 0;
-
+		/// <summary>
+		/// Gets a value that indicates whether a window is visible
+		/// </summary>
+		/// <returns></returns>
 		bool IsVisible() const;
-
+		/// <summary>
+		/// Checks if window is closed.
+		/// </summary>
+		/// <returns></returns>
 		bool IsClosed() const;
-
+		/// <summary>
+		/// Determines whether this window is focused
+		/// </summary>
+		/// <returns></returns>
+		bool IsFocused() const;
+		/// <summary>
+		/// Shows the window
+		/// </summary>
 		virtual void Show() = 0;
-
+		/// <summary>
+		/// Hides the window
+		/// </summary>
 		virtual void Hide() = 0;
 		/// <summary>
 		/// Minimize window to taskbar

@@ -27,7 +27,7 @@ void crgwin::Win32Platform::RegisterWindowClass() {
 
     if (!RegisterClassW((const WNDCLASSW*)&windowsClass))
     {
-        
+        //error registering window class
     }
 }
 

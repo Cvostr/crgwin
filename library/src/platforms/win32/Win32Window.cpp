@@ -12,16 +12,19 @@ Win32Window::Win32Window(const WindowCreateInfo& create_info) : Window(create_in
         win32_ex_style = 0;
 
     if (!create_info.borderless) {
+        //window isn't borderless
         win32_style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
     }
     else {
+        //window borderless
         win32_style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
         win32_ex_style |= WS_EX_WINDOWEDGE;
     }
-
+    //Convert UTF-8 title to unicode
     LPCWSTR w_title = CStrToWSTR(_title.c_str());
-
+    
     if (create_info.resize)
+        //if window should be resizeable, add maximize button in titlebar and resizeable corners
         win32_style |= WS_MAXIMIZEBOX | WS_SIZEBOX;
 
     int x = create_info.position.x;
@@ -40,7 +43,7 @@ Win32Window::Win32Window(const WindowCreateInfo& create_info) : Window(create_in
         width = winRect.right - winRect.left;
         height = winRect.bottom - winRect.top;
     }
-
+    //create window
     win32_handle = ::CreateWindowExW(
         win32_ex_style,
         WIN32_WIN_CLASS_W,
@@ -57,6 +60,7 @@ Win32Window::Win32Window(const WindowCreateInfo& create_info) : Window(create_in
 
     if (win32_handle == nullptr)
     {
+        //error creating window
         return;
     }
 
@@ -67,6 +71,7 @@ Win32Window::Win32Window(const WindowCreateInfo& create_info) : Window(create_in
         this->SetWindowPos(pos);
     }
 
+    //register window in list
     Win32Platform::RegisterWindow(this);
 }
 
@@ -102,9 +107,11 @@ LRESULT Win32Window::WndProc(UINT msg, WPARAM wParam, LPARAM lParam) {
     }
     case WM_SETFOCUS:
         //On got focus function
+        _focused = true;
         break;
     case WM_KILLFOCUS:
         //on lost focus function
+        _focused = false;
         break;
     case WM_CLOSE:
         //on window closed by user

@@ -23,6 +23,11 @@ public:
 		function = &StaticPointerMethodStub;
 	}
 
+	Function(const Function& other)
+		: callee(other.callee)
+		, function(other.function)
+	{}
+
 	void* callee;
 	Func function;
 

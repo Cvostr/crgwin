@@ -8,7 +8,8 @@ Window::Window(const WindowCreateInfo& create_info) :
 	_client_size(create_info.size),
 	_closed(false),
 	_visible(false),
-	_resizing(false)
+	_resizing(false),
+	_focused(false)
 {
 
 }
@@ -27,4 +28,8 @@ bool Window::IsVisible() const {
 
 bool Window::IsClosed() const {
 	return _closed;
+}
+
+bool Window::IsFocused() const {
+	return _focused;
 }
