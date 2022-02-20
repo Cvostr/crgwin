@@ -54,10 +54,15 @@ namespace crgwin {
 		}
 	};
 
+	enum class WindowState {
+		STATE_DEFAULT,
+		STATE_MAXIMIZED,
+		STATE_MINIMIZED
+	};
+	
 	class Window {
 	protected:
-		bool _minimized;
-		bool _maximized;
+		WindowState _state;
 		bool _closed;
 		bool _visible;
 		bool _resizing;
@@ -96,6 +101,8 @@ namespace crgwin {
 		/// </summary>
 		/// <param name="pos">- new position for window</param>
 		virtual void SetWindowPos(crgwin::ivec2 pos) = 0;
+
+		WindowState GetState() const;
 		/// <summary>
 		/// Gets a value that indicates whether a window is visible
 		/// </summary>

@@ -7,6 +7,8 @@ namespace crgwin {
 	class Win32Window : public Window {
 	private:
 		HWND win32_handle;
+
+		void WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam);
 	public:
 
 		Win32Window(const WindowCreateInfo& create_info);

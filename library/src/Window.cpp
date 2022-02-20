@@ -6,6 +6,7 @@ Window::Window(const WindowCreateInfo& create_info) :
 	_title(create_info.title),
 	_create_info(create_info),
 	_client_size(create_info.size),
+	_state(WindowState::STATE_DEFAULT),
 	_closed(false),
 	_visible(false),
 	_resizing(false),
@@ -20,6 +21,10 @@ const std::string& Window::GetTitle() const {
 
 const crgwin::ivec2& Window::GetSize() const {
 	return _client_size;
+}
+
+WindowState Window::GetState() const {
+	return _state;
 }
 
 bool Window::IsVisible() const {

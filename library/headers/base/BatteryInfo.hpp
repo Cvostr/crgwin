@@ -13,6 +13,6 @@ namespace crgwin {
 		BatteryState state;
 		float battery_charge;
 
-		BatteryInfo() : state(STATE_UNKNOWN), battery_charge(0) {}
+		BatteryInfo() : state(BatteryState::STATE_UNKNOWN), battery_charge(0) {}
 	};
 }

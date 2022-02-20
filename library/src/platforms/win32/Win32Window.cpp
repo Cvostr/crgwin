@@ -90,11 +90,14 @@ LRESULT Win32Window::WndProc(UINT msg, WPARAM wParam, LPARAM lParam) {
     {
         if (wParam == SIZE_MINIMIZED){
            //on window minimized
+            _state = WindowState::STATE_MINIMIZED;
         }
         else if(wParam == SIZE_MAXIMIZED){
            //on window maximized
+            _state = WindowState::STATE_MAXIMIZED;
         }
         else if (wParam == SIZE_RESTORED) {
+            _state = WindowState::STATE_DEFAULT;
             //on size restored
             if (_resizing) {
                 //window resized by user

@@ -7,6 +7,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(SRC_FILES   src/platforms/win32/Win32Window.cpp
 				src/platforms/win32/Win32Utils.cpp
 				src/platforms/win32/Win32Platform.cpp
+
+				src/platforms/linux/LinuxWindow.cpp
+				src/platforms/linux/LinuxPlatform.cpp
+
 				src/Window.cpp)
 
 set(HEADER 	headers/base/Platform.hpp 
@@ -16,7 +20,10 @@ set(HEADER 	headers/base/Platform.hpp
 			headers/base/MemoryInfo.hpp
 			headers/platforms/win32/Win32Window.hpp
 			headers/platforms/win32/Win32Utils.hpp
-			headers/platforms/win32/Win32Platform.hpp)
+			headers/platforms/win32/Win32Platform.hpp
+			
+			headers/platforms/linux/LinuxWindow.hpp
+			headers/platforms/linux/LinuxPlatform.hpp)
 
 include_directories("./headers" REQUIRED)
 
