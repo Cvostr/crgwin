@@ -3,6 +3,7 @@
 #include <string>
 #include <base/cgVec2.hpp>
 #include <base/Delegate.hpp>
+#include <base/InputConstants.hpp>
 
 #define WINDOW_DEFAULT_POS -1000
 
@@ -74,7 +75,9 @@ namespace crgwin {
 
 	public:
 
-		Function<void, int, int> mouse;
+		Function<void, KeyCode> keydown;
+
+		Function<void, KeyCode> keyup;
 
 		explicit Window(const WindowCreateInfo& create_info);
 
@@ -101,7 +104,10 @@ namespace crgwin {
 		/// </summary>
 		/// <param name="pos">- new position for window</param>
 		virtual void SetWindowPos(crgwin::ivec2 pos) = 0;
-
+		/// <summary>
+		/// Gets current window state
+		/// </summary>
+		/// <returns></returns>
 		WindowState GetState() const;
 		/// <summary>
 		/// Gets a value that indicates whether a window is visible

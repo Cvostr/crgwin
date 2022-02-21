@@ -8,4 +8,6 @@ void Init();
 
 Window* CreateWindow(WindowCreateInfo& create_info);
 
+void Tick();
+
 }

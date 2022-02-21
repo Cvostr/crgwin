@@ -84,6 +84,7 @@ HWND Win32Window::GetHWND() const {
 }
 
 LRESULT Win32Window::WndProc(UINT msg, WPARAM wParam, LPARAM lParam) {
+    WndProcInput(msg, wParam, lParam);
     switch (msg)
     {
     case WM_SIZE:

@@ -9,6 +9,7 @@ set(SRC_FILES
 				src/platforms/win32/Win32Window.cpp
 				src/platforms/win32/Win32Utils.cpp
 				src/platforms/win32/Win32Platform.cpp
+				src/platforms/win32/Win32Input.cpp
 
 				src/platforms/linux/LinuxWindow.cpp
 				src/platforms/linux/LinuxPlatform.cpp

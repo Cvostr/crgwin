@@ -32,7 +32,8 @@ public:
 	Func function;
 
 	ReturnType operator()(Params ... params) {
-		function(callee, params ...);
+		if(callee)
+			function(callee, params ...);
 	}
 };
 

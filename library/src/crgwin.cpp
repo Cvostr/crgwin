@@ -28,3 +28,13 @@ crgwin::Window* crgwin::CreateWindow(WindowCreateInfo& create_info){
 return new LinuxWindow(create_info);
 #endif
 }
+
+void crgwin::Tick() {
+#ifdef _WIN32
+    crgwin::Win32Platform::Tick();
+#endif
+
+#ifdef __linux__
+   // crgwin::LinuxPlatform::Init();
+#endif
+}

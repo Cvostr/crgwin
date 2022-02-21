@@ -1,8 +1,8 @@
 #include <crgwin.hpp>
 #include <iostream>
 
-void method(int dx, int dy) {
-	std::cout << dx << " " << dy;
+void method(KeyCode code) {
+	std::cout << code << std::endl;
 }
 
 int main(int argc, char** argv) {
@@ -16,9 +16,9 @@ int main(int argc, char** argv) {
 	crgwin::Window* w = crgwin::CreateWindow(cr_info);
 	w->Show();
 
-	w->mouse = Function<void, int, int>(method);
+	w->keydown = Function<void, KeyCode>(method);
 
 	while (true) {
-		//crgwin::Win32Platform::Tick();
+		crgwin::Tick();
 	}
 }
