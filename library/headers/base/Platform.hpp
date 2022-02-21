@@ -8,5 +8,7 @@ namespace crgwin {
 	class Platform {
 	public:
 		virtual unsigned long long GetTimeCycles() = 0;
+
+		void Tick() = delete;
 	};
 }

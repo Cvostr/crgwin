@@ -7,7 +7,7 @@
 		MOUSE_BUTTON_RIGHT
 	};
 
-	enum KeyCode {
+	enum crgKeyCode {
 		KEY_CODE_A = 'a',
 		KEY_CODE_B = 'b',
 		KEY_CODE_C = 'c',

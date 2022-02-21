@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <dwmapi.h>
 
-KeyCode GetKeyCode(WPARAM win_code) {
+crgKeyCode GetKeyCode(WPARAM win_code) {
     switch (win_code) {
     case VK_LCONTROL:
         return KEY_CODE_LCTRL;

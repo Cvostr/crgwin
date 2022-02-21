@@ -35,6 +35,6 @@ void crgwin::Tick() {
 #endif
 
 #ifdef __linux__
-   // crgwin::LinuxPlatform::Init();
+    crgwin::LinuxPlatform::Tick();
 #endif
 }

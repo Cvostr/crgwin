@@ -21,4 +21,18 @@ X11Display* crgwin::LinuxPlatform::GetDisplay(){
     return x11_display;
 }
 
+void crgwin::LinuxPlatform::Tick(){
+    if (!x11_display)
+        return;
+
+    while (::XPending(x11_display) > 0){
+        ::XEvent event;
+		::XNextEvent(x11_display, &event);
+
+        switch (event.type)
+		{
+        }
+    }
+}
+
 #endif

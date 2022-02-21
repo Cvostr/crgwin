@@ -12,7 +12,10 @@ namespace crgwin{
 
         static void Init();
 
+        static void Tick();
+
         static X11Display* GetDisplay();
+
 
     };
 }

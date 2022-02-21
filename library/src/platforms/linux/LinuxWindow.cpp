@@ -1,4 +1,5 @@
 #include <platforms/linux/LinuxWindow.hpp>
+#include <vector>
 
 #ifdef __linux__
 
@@ -38,6 +39,21 @@ crgwin::LinuxWindow::LinuxWindow(const WindowCreateInfo& create_info) : Window(c
 		CWBackPixel | CWBorderPixel | CWEventMask | CWColormap, &windowAttributes);
 
     SetTitle(create_info.title);
+
+    if(create_info.borderless){
+        
+    }
+
+    ::Atom wmState = ::XInternAtom(display, "_NET_WM_STATE", 0);
+    std::vector<::Atom> states;
+	
+
+    if(create_info.fullscreen){
+        ::Atom wmStateFullscreen = ::XInternAtom(display, "_NET_WM_STATE_FULLSCREEN", 0);
+        states.push_back(wmStateFullscreen);
+    }
+
+    ::XChangeProperty(display, _handle, wmState, (::Atom)4, 32, PropModeReplace, (unsigned char*)states.data(), states.size());
 }
 
 crgwin::LinuxWindow::~LinuxWindow(){

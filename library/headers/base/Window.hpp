@@ -75,9 +75,9 @@ namespace crgwin {
 
 	public:
 
-		Function<void, KeyCode> keydown;
+		Function<void, crgKeyCode> keydown;
 
-		Function<void, KeyCode> keyup;
+		Function<void, crgKeyCode> keyup;
 
 		explicit Window(const WindowCreateInfo& create_info);
 
