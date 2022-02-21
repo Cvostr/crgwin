@@ -28,14 +28,10 @@ namespace crgwin {
 
 	class Win32Platform : public crgwin::Platform {
 	private:
-		static std::vector<Win32Window*> windows;
+		
 	public:
 		static HINSTANCE GetInstance();
 		static void RegisterWindowClass();
 		static void Tick();
-
-		static void RegisterWindow(Win32Window* window);
-		static void UnregisterWindow(Win32Window* window);
-		static Win32Window* GetByHWND(HWND hwnd);
 	};
 }

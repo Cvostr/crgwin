@@ -7,14 +7,19 @@
 
 crgKeyCode GetKeyCode(WPARAM win_code) {
     switch (win_code) {
+    case VK_CONTROL:
     case VK_LCONTROL:
         return KEY_CODE_LCTRL;
     case VK_RCONTROL:
         return KEY_CODE_RCTRL;
     case VK_TAB:
         return KEY_CODE_TAB;
+    case VK_SHIFT:
     case VK_LSHIFT:
         return KEY_CODE_LSHIFT;
+    case VK_RSHIFT:
+        return KEY_CODE_RSHIFT;
+    case VK_MENU:
     case VK_LMENU:
         return KEY_CODE_LALT;
     case VK_RMENU:
@@ -117,24 +122,53 @@ crgKeyCode GetKeyCode(WPARAM win_code) {
     case 0x5A:
         return KEY_CODE_Z;
     }
-    return (KeyCode)0;
+    return (crgKeyCode)0;
 }
 
-void crgwin::Win32Window::WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam) {
+bool crgwin::Win32Window::WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam) {
+    bool result = false;
 	switch (msg) {
     case WM_KEYDOWN:
     case WM_SYSKEYDOWN:
     {
         keydown(GetKeyCode(wParam));
+        result = true;
         break;
     }
     case WM_KEYUP:
     case WM_SYSKEYUP:
     {
         keyup(GetKeyCode(wParam));
+        result = true;
+        break;
+    }
+
+    case WM_MOUSEMOVE:
+    {
+        
+        result = true;
+        break;
+    }
+    case WM_LBUTTONDOWN:
+    {
+        
+        result = true;
+        break;
+    }
+    case WM_RBUTTONDOWN:
+    {
+       
+        result = true;
+        break;
+    }
+    case WM_MBUTTONDOWN:
+    {
+        result = true;
         break;
     }
 	}
+
+    return result;
 }
 
 #endif

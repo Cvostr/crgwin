@@ -79,7 +79,7 @@ Win32Window::~Win32Window() {
     Close();
 }
 
-HWND Win32Window::GetHWND() const {
+WindowHandle Win32Window::GetNativeHandle() const {
     return win32_handle;
 }
 
@@ -187,6 +187,12 @@ void Win32Window::Close() {
         Win32Platform::UnregisterWindow(this);
         win32_handle = nullptr;
         _visible = false;
+    }
+}
+
+void Win32Window::Restore() {
+    if (win32_handle) {
+        ::ShowWindow(win32_handle, SW_RESTORE);
     }
 }
 

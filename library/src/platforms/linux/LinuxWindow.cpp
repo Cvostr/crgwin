@@ -60,6 +60,10 @@ crgwin::LinuxWindow::~LinuxWindow(){
 
 }
 
+WindowHandle crgwin::LinuxWindow::GetNativeHandle() const {
+    return _handle;
+}
+
 void crgwin::LinuxWindow::SetTitle(const std::string& title){
     if(_handle){
         ::XStoreName(LinuxPlatform::GetDisplay(), _handle, title.c_str());
@@ -102,6 +106,10 @@ void crgwin::LinuxWindow::Close(){
     if(_handle && display){
         ::XDestroyWindow(display, _handle);
     }
+}
+
+void crgwin::LinuxWindow::Restore() {
+
 }
 
 #endif

@@ -8,14 +8,14 @@ namespace crgwin {
 	private:
 		HWND win32_handle;
 
-		void WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam);
+		bool WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam);
 	public:
 
 		Win32Window(const WindowCreateInfo& create_info);
 
 		~Win32Window();
 
-		HWND GetHWND() const;
+		WindowHandle GetNativeHandle() const;
 
 		LRESULT WndProc(UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -34,5 +34,7 @@ namespace crgwin {
 		void Maximize();
 
 		void Close();
+
+		void Restore();
 	};
 }

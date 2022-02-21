@@ -12,6 +12,8 @@ namespace crgwin {
 
 		~LinuxWindow();
 
+		WindowHandle GetNativeHandle() const;
+
 		void SetTitle(const std::string& title);
 
 		crgwin::ivec2 GetWindowPos();
@@ -27,5 +29,7 @@ namespace crgwin {
 		void Maximize();
 
 		void Close();
+
+		void Restore();
 	};
 }

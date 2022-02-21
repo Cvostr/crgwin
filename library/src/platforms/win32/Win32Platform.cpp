@@ -6,8 +6,6 @@
 #include "string.h"
 #include <algorithm>
 
-std::vector<crgwin::Win32Window*> crgwin::Win32Platform::windows;
-
 HINSTANCE crgwin::Win32Platform::GetInstance() {
     return GetModuleHandle(NULL);
 }
@@ -37,7 +35,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     if (hwnd != nullptr)
     {
         // Find window by handle
-        const auto win = crgwin::Win32Platform::GetByHWND(hwnd);
+        crgwin::Win32Window* win = (crgwin::Win32Window*)
+            crgwin::Win32Platform::GetByHandle(hwnd);
         if (win)
         {
             return (win)->WndProc(msg, wParam, lParam);
@@ -57,25 +56,4 @@ void crgwin::Win32Platform::Tick() {
         DispatchMessage(&msg);
     }
 }
-
-void crgwin::Win32Platform::RegisterWindow(Win32Window* window) {
-    if (GetByHWND(window->GetHWND()))
-        return;
-    
-    windows.push_back(window);
-}
-void crgwin::Win32Platform::UnregisterWindow(Win32Window* window) {
-    if (GetByHWND(window->GetHWND())) {
-        std::remove(windows.begin(), windows.end(), window);
-        windows.pop_back();
-    }
-}
-crgwin::Win32Window* crgwin::Win32Platform::GetByHWND(HWND hwnd) {
-    for (auto& win : windows) {
-        if (win->GetHWND() == hwnd)
-            return win;
-    }
-    return nullptr;
-}
-
 #endif

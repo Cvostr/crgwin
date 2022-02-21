@@ -14,7 +14,8 @@ set(SRC_FILES
 				src/platforms/linux/LinuxWindow.cpp
 				src/platforms/linux/LinuxPlatform.cpp
 
-				src/Window.cpp)
+				src/base/Window.cpp
+				src/base/Platform.cpp)
 
 set(HEADER 	
 			headers/crgwin.hpp

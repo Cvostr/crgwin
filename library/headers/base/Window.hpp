@@ -61,6 +61,8 @@ namespace crgwin {
 		STATE_MINIMIZED
 	};
 	
+	typedef void* WindowHandle;
+
 	class Window {
 	protected:
 		WindowState _state;
@@ -144,5 +146,9 @@ namespace crgwin {
 		/// Destroy window
 		/// </summary>
 		virtual void Close() = 0;
+
+		virtual void Restore() = 0;
+
+		virtual WindowHandle GetNativeHandle() const = 0;
 	};
 }
