@@ -10,6 +10,7 @@ set(SRC_FILES
 				src/platforms/win32/Win32Utils.cpp
 				src/platforms/win32/Win32Platform.cpp
 				src/platforms/win32/Win32Input.cpp
+				src/platforms/win32/Win32Mutex.cpp
 
 				src/platforms/linux/LinuxWindow.cpp
 				src/platforms/linux/LinuxPlatform.cpp
@@ -24,9 +25,12 @@ set(HEADER
 			headers/base/BatteryInfo.hpp
 			headers/base/CpuInfo.hpp
 			headers/base/MemoryInfo.hpp
+			headers/base/Mutex.hpp
+			headers/base/Thread.hpp
 			headers/platforms/win32/Win32Window.hpp
 			headers/platforms/win32/Win32Utils.hpp
 			headers/platforms/win32/Win32Platform.hpp
+			headers/platforms/win32/Win32Mutex.hpp
 			
 			headers/platforms/linux/LinuxWindow.hpp
 			headers/platforms/linux/LinuxPlatform.hpp)

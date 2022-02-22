@@ -1,7 +1,7 @@
 #pragma once
 
 
-	enum MouseButton {
+	enum crgMouseButton {
 		MOUSE_BUTTON_LEFT = 1,
 		MOUSE_BUTTON_MIDDLE,
 		MOUSE_BUTTON_RIGHT

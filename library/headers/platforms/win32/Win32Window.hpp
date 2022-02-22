@@ -25,6 +25,8 @@ namespace crgwin {
 
 		void SetWindowPos(crgwin::ivec2 pos);
 
+		void Resize(const crgwin::ivec2& size);
+
 		void Show();
 
 		void Hide();

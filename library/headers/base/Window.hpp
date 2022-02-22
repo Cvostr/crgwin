@@ -2,8 +2,8 @@
 
 #include <string>
 #include <base/cgVec2.hpp>
-#include <base/Delegate.hpp>
 #include <base/InputConstants.hpp>
+#include <functional>
 
 #define WINDOW_DEFAULT_POS -1000
 
@@ -60,8 +60,36 @@ namespace crgwin {
 		STATE_MAXIMIZED,
 		STATE_MINIMIZED
 	};
+
+	enum class WindowEventType {
+		EVENT_NONE = 0,
+		EVENT_KEYDOWN,
+		EVENT_KEYUP,
+		EVENT_MOUSE_BTN_DOWN,
+		EVENT_MOUSE_BTN_UP,
+		EVENT_MOUSE_MOVED,
+		EVENT_STATE_CHANGED,
+		EVENT_SIZE_CHANGED
+	};
 	
+	class WindowEvent {
+	public:
+
+		WindowEvent() :
+			type(WindowEventType::EVENT_NONE), coord(0, 0) 
+		{}
+
+		WindowEventType type;
+		union {
+			crgKeyCode key;
+			crgMouseButton mouse_button;
+			WindowState state;
+			ivec2 coord;
+		};
+	};
+
 	typedef void* WindowHandle;
+	typedef std::function<void(WindowEvent)> WindowEventHandler;
 
 	class Window {
 	protected:
@@ -75,11 +103,8 @@ namespace crgwin {
 
 		WindowCreateInfo _create_info;
 
+		WindowEventHandler _events_handler;
 	public:
-
-		Function<void, crgKeyCode> keydown;
-
-		Function<void, crgKeyCode> keyup;
 
 		explicit Window(const WindowCreateInfo& create_info);
 
@@ -94,8 +119,16 @@ namespace crgwin {
 		/// </summary>
 		/// <param name="title">- new title string</param>
 		virtual void SetTitle(const std::string& title) = 0;
-
+		/// <summary>
+		/// Get size of window client area
+		/// </summary>
+		/// <returns></returns>
 		const crgwin::ivec2& GetSize() const;
+		/// <summary>
+		/// Resize window client area
+		/// </summary>
+		/// <param name="size">- new size of client area</param>
+		virtual void Resize(const crgwin::ivec2& size) = 0;
 		/// <summary>
 		/// Gets current window position
 		/// </summary>
@@ -146,9 +179,16 @@ namespace crgwin {
 		/// Destroy window
 		/// </summary>
 		virtual void Close() = 0;
-
+		/// <summary>
+		/// Restore window
+		/// </summary>
 		virtual void Restore() = 0;
 
+		void SetEventsHandler(WindowEventHandler handler);
+		/// <summary>
+		/// Get platform dependent window handler pointer
+		/// </summary>
+		/// <returns></returns>
 		virtual WindowHandle GetNativeHandle() const = 0;
 	};
 }

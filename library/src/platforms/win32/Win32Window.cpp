@@ -84,7 +84,9 @@ WindowHandle Win32Window::GetNativeHandle() const {
 }
 
 LRESULT Win32Window::WndProc(UINT msg, WPARAM wParam, LPARAM lParam) {
-    WndProcInput(msg, wParam, lParam);
+    if (WndProcInput(msg, wParam, lParam))
+        return true;
+    WindowEvent r_event;
     switch (msg)
     {
     case WM_SIZE:
@@ -92,10 +94,16 @@ LRESULT Win32Window::WndProc(UINT msg, WPARAM wParam, LPARAM lParam) {
         if (wParam == SIZE_MINIMIZED){
            //on window minimized
             _state = WindowState::STATE_MINIMIZED;
+            r_event.type = WindowEventType::EVENT_STATE_CHANGED;
+            r_event.state = WindowState::STATE_MINIMIZED;
+            _events_handler(r_event);
         }
         else if(wParam == SIZE_MAXIMIZED){
            //on window maximized
             _state = WindowState::STATE_MAXIMIZED;
+            r_event.type = WindowEventType::EVENT_STATE_CHANGED;
+            r_event.state = WindowState::STATE_MAXIMIZED;
+            _events_handler(r_event);
         }
         else if (wParam == SIZE_RESTORED) {
             _state = WindowState::STATE_DEFAULT;
@@ -152,9 +160,29 @@ crgwin::ivec2 Win32Window::GetWindowPos() {
 }
 
 void Win32Window::SetWindowPos(crgwin::ivec2 pos) {
-    ::SetWindowPos(win32_handle,
-        nullptr, pos.x, pos.y, 0, 0,
-        SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+    if (win32_handle) {
+        ::SetWindowPos(win32_handle,
+            nullptr, pos.x, pos.y, 0, 0,
+            SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+    }
+}
+
+void Win32Window::Resize(const crgwin::ivec2& size) {
+    if (win32_handle) {
+        WINDOWINFO winInfo;
+        memset(&winInfo,0,  sizeof(WINDOWINFO));
+        winInfo.cbSize = sizeof(winInfo);
+        GetWindowInfo(win32_handle, &winInfo);
+
+        RECT winRect = { 0, 0, size.x, size.y };
+        AdjustWindowRectEx(&winRect, winInfo.dwStyle, FALSE, winInfo.dwExStyle);
+        int width = winRect.right - winRect.left;
+        int height = winRect.bottom - winRect.top;
+
+        ivec2 pos = this->GetWindowPos();
+
+        ::SetWindowPos(win32_handle, nullptr, pos.x, pos.y, width, height, SWP_NOZORDER | SWP_NOACTIVATE);
+    }
 }
 
 void Win32Window::Show() {

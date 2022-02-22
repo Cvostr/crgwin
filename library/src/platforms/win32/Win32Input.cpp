@@ -3,7 +3,7 @@
 
 #ifdef _WIN32
 #include <windows.h>
-#include <dwmapi.h>
+#include <windowsx.h>
 
 crgKeyCode GetKeyCode(WPARAM win_code) {
     switch (win_code) {
@@ -127,42 +127,84 @@ crgKeyCode GetKeyCode(WPARAM win_code) {
 
 bool crgwin::Win32Window::WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam) {
     bool result = false;
+    WindowEvent r_event;
+
 	switch (msg) {
     case WM_KEYDOWN:
     case WM_SYSKEYDOWN:
     {
-        keydown(GetKeyCode(wParam));
+        r_event.type = WindowEventType::EVENT_KEYDOWN;
+        r_event.key = GetKeyCode(wParam);
+        _events_handler(r_event);
         result = true;
         break;
     }
     case WM_KEYUP:
     case WM_SYSKEYUP:
     {
-        keyup(GetKeyCode(wParam));
+        r_event.type = WindowEventType::EVENT_KEYUP;
+        r_event.key = GetKeyCode(wParam);
+        _events_handler(r_event);
         result = true;
         break;
     }
-
     case WM_MOUSEMOVE:
     {
-        
+        POINT p;
+        p.x = static_cast<LONG>(GET_X_LPARAM(lParam));
+        p.y = static_cast<LONG>(GET_Y_LPARAM(lParam));
+        //::ClientToScreen(win32_handle, &p);
+        r_event.type = WindowEventType::EVENT_MOUSE_MOVED;
+        r_event.coord = crgwin::ivec2(p.x, p.y);
+        _events_handler(r_event);
         result = true;
         break;
     }
     case WM_LBUTTONDOWN:
     {
-        
+        r_event.type = WindowEventType::EVENT_MOUSE_BTN_DOWN;
+        r_event.mouse_button = crgMouseButton::MOUSE_BUTTON_LEFT;
+        _events_handler(r_event);
         result = true;
         break;
     }
     case WM_RBUTTONDOWN:
     {
-       
+        r_event.type = WindowEventType::EVENT_MOUSE_BTN_DOWN;
+        r_event.mouse_button = crgMouseButton::MOUSE_BUTTON_RIGHT;
+        _events_handler(r_event);
         result = true;
         break;
     }
     case WM_MBUTTONDOWN:
     {
+        r_event.type = WindowEventType::EVENT_MOUSE_BTN_DOWN;
+        r_event.mouse_button = crgMouseButton::MOUSE_BUTTON_MIDDLE;
+        _events_handler(r_event);
+        result = true;
+        break;
+    }
+    case WM_LBUTTONUP:
+    {
+        r_event.type = WindowEventType::EVENT_MOUSE_BTN_UP;
+        r_event.mouse_button = crgMouseButton::MOUSE_BUTTON_LEFT;
+        _events_handler(r_event);
+        result = true;
+        break;
+    }
+    case WM_RBUTTONUP:
+    {
+        r_event.type = WindowEventType::EVENT_MOUSE_BTN_UP;
+        r_event.mouse_button = crgMouseButton::MOUSE_BUTTON_RIGHT;
+        _events_handler(r_event);
+        result = true;
+        break;
+    }
+    case WM_MBUTTONUP:
+    {
+        r_event.type = WindowEventType::EVENT_MOUSE_BTN_UP;
+        r_event.mouse_button = crgMouseButton::MOUSE_BUTTON_MIDDLE;
+        _events_handler(r_event);
         result = true;
         break;
     }

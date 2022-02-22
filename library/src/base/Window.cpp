@@ -38,3 +38,7 @@ bool Window::IsClosed() const {
 bool Window::IsFocused() const {
 	return _focused;
 }
+
+void Window::SetEventsHandler(WindowEventHandler handler) {
+	_events_handler = handler;
+}
