@@ -13,7 +13,7 @@ public:
 
 		win = crgwin::CreateWindow(cr_info);
 		win->Show();
-		win->SetEventsHandler(std::bind(&App::EventsHandler, this, std::placeholders::_1));
+		win->SetEventsHandler(EVENTS_HANDLER(App::EventsHandler));
 
 		while (true) {
 			crgwin::Tick();
@@ -25,6 +25,10 @@ public:
 			std::cout << "Key pressed " << event.key << std::endl;
 			if (event.key == crgKeyCode::KEY_CODE_B)
 				win->Resize(crgwin::ivec2(1366, 768));
+			if (event.key == crgKeyCode::KEY_CODE_M)
+				win->Minimize();
+			if (event.key == crgKeyCode::KEY_CODE_N)
+				win->Maximize();
 		}
 		if (event.type == crgwin::WindowEventType::EVENT_MOUSE_MOVED) {
 			std::cout << "mouse moved " << event.coord.x << " " << event.coord.y << std::endl;

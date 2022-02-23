@@ -96,20 +96,22 @@ LRESULT Win32Window::WndProc(UINT msg, WPARAM wParam, LPARAM lParam) {
             _state = WindowState::STATE_MINIMIZED;
             r_event.type = WindowEventType::EVENT_STATE_CHANGED;
             r_event.state = WindowState::STATE_MINIMIZED;
-            _events_handler(r_event);
+            CallEvent(r_event);
         }
         else if(wParam == SIZE_MAXIMIZED){
            //on window maximized
             _state = WindowState::STATE_MAXIMIZED;
             r_event.type = WindowEventType::EVENT_STATE_CHANGED;
             r_event.state = WindowState::STATE_MAXIMIZED;
-            _events_handler(r_event);
+            CallEvent(r_event);
         }
         else if (wParam == SIZE_RESTORED) {
             _state = WindowState::STATE_DEFAULT;
             //on size restored
             if (_resizing) {
                 //window resized by user
+                r_event.type = WindowEventType::EVENT_SIZE_CHANGED;
+                CallEvent(r_event);
             }
             else {
                 //window resized by API
@@ -169,19 +171,25 @@ void Win32Window::SetWindowPos(crgwin::ivec2 pos) {
 
 void Win32Window::Resize(const crgwin::ivec2& size) {
     if (win32_handle) {
-        WINDOWINFO winInfo;
-        memset(&winInfo,0,  sizeof(WINDOWINFO));
-        winInfo.cbSize = sizeof(winInfo);
-        GetWindowInfo(win32_handle, &winInfo);
+        int width = size.x;
+        int height = size.y;
 
-        RECT winRect = { 0, 0, size.x, size.y };
-        AdjustWindowRectEx(&winRect, winInfo.dwStyle, FALSE, winInfo.dwExStyle);
-        int width = winRect.right - winRect.left;
-        int height = winRect.bottom - winRect.top;
+        if (!_create_info.borderless) {
+            WINDOWINFO winInfo;
+            memset(&winInfo, 0, sizeof(WINDOWINFO));
+            winInfo.cbSize = sizeof(winInfo);
+            GetWindowInfo(win32_handle, &winInfo);
+
+            RECT winRect = { 0, 0, size.x, size.y };
+            AdjustWindowRectEx(&winRect, winInfo.dwStyle, FALSE, winInfo.dwExStyle);
+            width = winRect.right - winRect.left;
+            height = winRect.bottom - winRect.top;
+        }
 
         ivec2 pos = this->GetWindowPos();
 
         ::SetWindowPos(win32_handle, nullptr, pos.x, pos.y, width, height, SWP_NOZORDER | SWP_NOACTIVATE);
+        _client_size = size;
     }
 }
 

@@ -42,3 +42,7 @@ bool Window::IsFocused() const {
 void Window::SetEventsHandler(WindowEventHandler handler) {
 	_events_handler = handler;
 }
+
+void Window::CallEvent(const WindowEvent& event) {
+	_events_handler(event);
+}

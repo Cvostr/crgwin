@@ -135,7 +135,7 @@ bool crgwin::Win32Window::WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam) {
     {
         r_event.type = WindowEventType::EVENT_KEYDOWN;
         r_event.key = GetKeyCode(wParam);
-        _events_handler(r_event);
+        CallEvent(r_event);
         result = true;
         break;
     }
@@ -144,7 +144,7 @@ bool crgwin::Win32Window::WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam) {
     {
         r_event.type = WindowEventType::EVENT_KEYUP;
         r_event.key = GetKeyCode(wParam);
-        _events_handler(r_event);
+        CallEvent(r_event);
         result = true;
         break;
     }
@@ -156,7 +156,7 @@ bool crgwin::Win32Window::WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam) {
         //::ClientToScreen(win32_handle, &p);
         r_event.type = WindowEventType::EVENT_MOUSE_MOVED;
         r_event.coord = crgwin::ivec2(p.x, p.y);
-        _events_handler(r_event);
+        CallEvent(r_event);
         result = true;
         break;
     }
@@ -164,7 +164,7 @@ bool crgwin::Win32Window::WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam) {
     {
         r_event.type = WindowEventType::EVENT_MOUSE_BTN_DOWN;
         r_event.mouse_button = crgMouseButton::MOUSE_BUTTON_LEFT;
-        _events_handler(r_event);
+        CallEvent(r_event);
         result = true;
         break;
     }
@@ -172,7 +172,7 @@ bool crgwin::Win32Window::WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam) {
     {
         r_event.type = WindowEventType::EVENT_MOUSE_BTN_DOWN;
         r_event.mouse_button = crgMouseButton::MOUSE_BUTTON_RIGHT;
-        _events_handler(r_event);
+        CallEvent(r_event);
         result = true;
         break;
     }
@@ -180,7 +180,7 @@ bool crgwin::Win32Window::WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam) {
     {
         r_event.type = WindowEventType::EVENT_MOUSE_BTN_DOWN;
         r_event.mouse_button = crgMouseButton::MOUSE_BUTTON_MIDDLE;
-        _events_handler(r_event);
+        CallEvent(r_event);
         result = true;
         break;
     }
@@ -188,7 +188,7 @@ bool crgwin::Win32Window::WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam) {
     {
         r_event.type = WindowEventType::EVENT_MOUSE_BTN_UP;
         r_event.mouse_button = crgMouseButton::MOUSE_BUTTON_LEFT;
-        _events_handler(r_event);
+        CallEvent(r_event);
         result = true;
         break;
     }
@@ -196,7 +196,7 @@ bool crgwin::Win32Window::WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam) {
     {
         r_event.type = WindowEventType::EVENT_MOUSE_BTN_UP;
         r_event.mouse_button = crgMouseButton::MOUSE_BUTTON_RIGHT;
-        _events_handler(r_event);
+        CallEvent(r_event);
         result = true;
         break;
     }
@@ -204,7 +204,7 @@ bool crgwin::Win32Window::WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam) {
     {
         r_event.type = WindowEventType::EVENT_MOUSE_BTN_UP;
         r_event.mouse_button = crgMouseButton::MOUSE_BUTTON_MIDDLE;
-        _events_handler(r_event);
+        CallEvent(r_event);
         result = true;
         break;
     }

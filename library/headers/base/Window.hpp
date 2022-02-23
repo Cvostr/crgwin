@@ -91,6 +91,8 @@ namespace crgwin {
 	typedef void* WindowHandle;
 	typedef std::function<void(WindowEvent)> WindowEventHandler;
 
+#define EVENTS_HANDLER(x) std::bind(&x, this, std::placeholders::_1)
+
 	class Window {
 	protected:
 		WindowState _state;
@@ -104,6 +106,8 @@ namespace crgwin {
 		WindowCreateInfo _create_info;
 
 		WindowEventHandler _events_handler;
+
+		void CallEvent(const WindowEvent& event);
 	public:
 
 		explicit Window(const WindowCreateInfo& create_info);
