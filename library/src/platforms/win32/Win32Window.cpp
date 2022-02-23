@@ -8,24 +8,11 @@
 using namespace crgwin;
 
 Win32Window::Win32Window(const WindowCreateInfo& create_info) : Window(create_info) {
-    unsigned int win32_style = WS_POPUP,
-        win32_ex_style = 0;
+    unsigned int win32_style = GetWin32Style(),
+        win32_ex_style = GetWin32ExStyle();
 
-    if (!create_info.borderless) {
-        //window isn't borderless
-        win32_style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
-    }
-    else {
-        //window borderless
-        win32_style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-        win32_ex_style |= WS_EX_WINDOWEDGE;
-    }
     //Convert UTF-8 title to unicode
     LPCWSTR w_title = CStrToWSTR(_title.c_str());
-    
-    if (create_info.resize)
-        //if window should be resizeable, add maximize button in titlebar and resizeable corners
-        win32_style |= WS_MAXIMIZEBOX | WS_SIZEBOX;
 
     int x = create_info.position.x;
     int y = create_info.position.y;
@@ -83,6 +70,31 @@ WindowHandle Win32Window::GetNativeHandle() const {
     return win32_handle;
 }
 
+unsigned int Win32Window::GetWin32Style() {
+    unsigned int result = WS_POPUP;
+    if (!_create_info.borderless) {
+        //window isn't borderless
+        result = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
+    }
+    else {
+        //window borderless
+        result |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+    }
+    if (_create_info.resize)
+        //if window should be resizeable, add maximize button in titlebar and resizeable corners
+        result |= WS_MAXIMIZEBOX | WS_SIZEBOX;
+
+    return result;
+}
+
+unsigned int Win32Window::GetWin32ExStyle() {
+    unsigned int result = 0;
+    if (_create_info.borderless) {
+        result |= WS_EX_WINDOWEDGE;
+    }
+    return result;
+}
+
 LRESULT Win32Window::WndProc(UINT msg, WPARAM wParam, LPARAM lParam) {
     if (WndProcInput(msg, wParam, lParam))
         return true;
@@ -112,24 +124,32 @@ LRESULT Win32Window::WndProc(UINT msg, WPARAM wParam, LPARAM lParam) {
                 //window resized by user
                 r_event.type = WindowEventType::EVENT_SIZE_CHANGED;
                 CallEvent(r_event);
+                UpdateClientSize();
             }
             else {
                 //window resized by API
+                
             }
         }
         break;
     }
     case WM_SETFOCUS:
         //On got focus function
+        r_event.type = WindowEventType::EVENT_FOCUS_GAIN;
+        CallEvent(r_event);
         _focused = true;
         break;
     case WM_KILLFOCUS:
         //on lost focus function
+        r_event.type = WindowEventType::EVENT_FOCUS_LOST;
+        CallEvent(r_event);
         _focused = false;
         break;
     case WM_CLOSE:
         //on window closed by user
         Close();
+        r_event.type = WindowEventType::EVENT_CLOSED;
+        CallEvent(r_event);
         return 0;
     case WM_ENTERSIZEMOVE:
         //on user resizing window
@@ -142,6 +162,14 @@ LRESULT Win32Window::WndProc(UINT msg, WPARAM wParam, LPARAM lParam) {
     }
 
     return DefWindowProcW(win32_handle, msg, wParam, lParam);
+}
+
+void Win32Window::UpdateClientSize() {
+    RECT rect;
+    GetClientRect(win32_handle, &rect);
+    int width = rect.right - rect.left;
+    int height = rect.bottom - rect.top;
+    _client_size = crgwin::ivec2(width, height);
 }
 
 void Win32Window::SetTitle(const std::string& title) {
@@ -190,6 +218,23 @@ void Win32Window::Resize(const crgwin::ivec2& size) {
 
         ::SetWindowPos(win32_handle, nullptr, pos.x, pos.y, width, height, SWP_NOZORDER | SWP_NOACTIVATE);
         _client_size = size;
+    }
+}
+
+void Win32Window::SetResizeable(bool resizeable) {
+    if (win32_handle) {
+        _create_info.resize = resizeable;
+        SetWindowLongPtr(win32_handle, GWL_STYLE, GetWin32Style());
+        ::ShowWindow(win32_handle, SW_SHOW);
+    }
+}
+
+void Win32Window::SetBorderless(bool borderless) {
+    if (win32_handle) {
+        _create_info.borderless = borderless;
+        SetWindowLongPtr(win32_handle, GWL_STYLE, GetWin32Style());
+        SetWindowLongPtr(win32_handle, GWL_EXSTYLE, GetWin32ExStyle());
+        ::ShowWindow(win32_handle, SW_SHOW);
     }
 }
 

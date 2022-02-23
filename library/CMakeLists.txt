@@ -14,6 +14,7 @@ set(SRC_FILES
 
 				src/platforms/linux/LinuxWindow.cpp
 				src/platforms/linux/LinuxPlatform.cpp
+				src/platforms/linux/LinuxMutex.cpp
 
 				src/base/Window.cpp
 				src/base/Platform.cpp)
@@ -26,11 +27,9 @@ set(HEADER
 			headers/base/CpuInfo.hpp
 			headers/base/MemoryInfo.hpp
 			headers/base/Mutex.hpp
-			headers/base/Thread.hpp
 			headers/platforms/win32/Win32Window.hpp
 			headers/platforms/win32/Win32Utils.hpp
 			headers/platforms/win32/Win32Platform.hpp
-			headers/platforms/win32/Win32Mutex.hpp
 			
 			headers/platforms/linux/LinuxWindow.hpp
 			headers/platforms/linux/LinuxPlatform.hpp)

@@ -44,5 +44,6 @@ void Window::SetEventsHandler(WindowEventHandler handler) {
 }
 
 void Window::CallEvent(const WindowEvent& event) {
-	_events_handler(event);
+	if(_events_handler)
+		_events_handler(event);
 }

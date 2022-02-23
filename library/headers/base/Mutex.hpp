@@ -6,18 +6,14 @@ namespace crgwin {
 		void* _handle;
 	public:
 
-		Mutex() {
+		Mutex();
 
-		}
+		~Mutex();
 
-		virtual ~Mutex() {
+		void Lock();
 
-		}
+		void Unlock();
 
-		virtual void Lock() = 0;
-
-		virtual void Unlock() = 0;
-
-		virtual void Destroy() = 0;
+		void Destroy();
 	};
 }

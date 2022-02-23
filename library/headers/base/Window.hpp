@@ -69,7 +69,10 @@ namespace crgwin {
 		EVENT_MOUSE_BTN_UP,
 		EVENT_MOUSE_MOVED,
 		EVENT_STATE_CHANGED,
-		EVENT_SIZE_CHANGED
+		EVENT_SIZE_CHANGED,
+		EVENT_FOCUS_GAIN,
+		EVENT_FOCUS_LOST,
+		EVENT_CLOSED
 	};
 	
 	class WindowEvent {
@@ -163,6 +166,10 @@ namespace crgwin {
 		/// </summary>
 		/// <returns></returns>
 		bool IsFocused() const;
+
+		virtual void SetResizeable(bool resizeable) = 0;
+
+		virtual void SetBorderless(bool borderless) = 0;
 		/// <summary>
 		/// Shows the window
 		/// </summary>
@@ -187,7 +194,10 @@ namespace crgwin {
 		/// Restore window
 		/// </summary>
 		virtual void Restore() = 0;
-
+		/// <summary>
+		/// Sets event handler method
+		/// </summary>
+		/// <param name="handler"></param>
 		void SetEventsHandler(WindowEventHandler handler);
 		/// <summary>
 		/// Get platform dependent window handler pointer

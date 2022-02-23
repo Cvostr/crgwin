@@ -4,6 +4,7 @@
 class App {
 private:
 	crgwin::Window* win;
+	bool running;
 public:
 
 	App() {
@@ -15,7 +16,8 @@ public:
 		win->Show();
 		win->SetEventsHandler(EVENTS_HANDLER(App::EventsHandler));
 
-		while (true) {
+		running = true;
+		while (running) {
 			crgwin::Tick();
 		}
 	}
@@ -29,17 +31,36 @@ public:
 				win->Minimize();
 			if (event.key == crgKeyCode::KEY_CODE_N)
 				win->Maximize();
+			if (event.key == crgKeyCode::KEY_CODE_R)
+				win->SetResizeable(true);
+			if (event.key == crgKeyCode::KEY_CODE_K)
+				win->SetBorderless(true);
 		}
 		if (event.type == crgwin::WindowEventType::EVENT_MOUSE_MOVED) {
-			std::cout << "mouse moved " << event.coord.x << " " << event.coord.y << std::endl;
+			//std::cout << "mouse moved " << event.coord.x << " " << event.coord.y << std::endl;
+		}
+		if (event.type == crgwin::WindowEventType::EVENT_FOCUS_GAIN) {
+			std::cout << "focus gained" << std::endl;
+		}
+		if (event.type == crgwin::WindowEventType::EVENT_FOCUS_LOST) {
+			std::cout << "focus lost" << std::endl;
+		}
+		if (event.type == crgwin::WindowEventType::EVENT_SIZE_CHANGED) {
+			std::cout << "window resized" << std::endl;
+		}
+		if (event.type == crgwin::WindowEventType::EVENT_STATE_CHANGED) {
+			if(event.state == crgwin::WindowState::STATE_MINIMIZED)
+				std::cout << "window minimized" << std::endl;
+		}
+		if (event.type == crgwin::WindowEventType::EVENT_CLOSED) {
+			std::cout << "window closed" << std::endl;
+			running = false;
 		}
 	}
 };
 
 int main(int argc, char** argv) {
 	
-	//cr_info.borderless = true;
-
 	crgwin::Init();
 
 

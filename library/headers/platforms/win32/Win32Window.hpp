@@ -9,6 +9,10 @@ namespace crgwin {
 		HWND win32_handle;
 
 		bool WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam);
+		void UpdateClientSize();
+
+		unsigned int GetWin32Style();
+		unsigned int GetWin32ExStyle();
 	public:
 
 		Win32Window(const WindowCreateInfo& create_info);
@@ -26,6 +30,10 @@ namespace crgwin {
 		void SetWindowPos(crgwin::ivec2 pos);
 
 		void Resize(const crgwin::ivec2& size);
+
+		void SetResizeable(bool resizeable);
+
+		void SetBorderless(bool borderless);
 
 		void Show();
 
