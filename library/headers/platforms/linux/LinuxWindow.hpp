@@ -12,6 +12,8 @@ namespace crgwin {
 
 		~LinuxWindow();
 
+		void ProcessEvent(void* pEvent);
+
 		WindowHandle GetNativeHandle() const;
 
 		void SetTitle(const std::string& title);
@@ -19,6 +21,8 @@ namespace crgwin {
 		crgwin::ivec2 GetWindowPos();
 
 		void SetWindowPos(crgwin::ivec2 pos);
+
+		void Resize(const crgwin::ivec2& size);
 
 		void Show();
 

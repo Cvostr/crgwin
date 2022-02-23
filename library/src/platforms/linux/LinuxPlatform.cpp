@@ -1,4 +1,5 @@
 #include <platforms/linux/LinuxPlatform.hpp>
+#include <platforms/linux/LinuxWindow.hpp>
 
 #ifdef __linux__
 
@@ -29,8 +30,14 @@ void crgwin::LinuxPlatform::Tick(){
         ::XEvent event;
 		::XNextEvent(x11_display, &event);
 
-        switch (event.type)
-		{
+        if (::XFilterEvent(&event, 0))
+			continue;
+
+        WindowHandle window_handle = (WindowHandle)event.xclient.window;
+        LinuxWindow* window = static_cast<LinuxWindow*>(Platform::GetByHandle(window_handle));
+
+        if(window){
+            window->ProcessEvent(&event);
         }
     }
 }

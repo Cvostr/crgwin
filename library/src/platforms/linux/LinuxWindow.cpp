@@ -54,14 +54,16 @@ crgwin::LinuxWindow::LinuxWindow(const WindowCreateInfo& create_info) : Window(c
     }
 
     ::XChangeProperty(display, _handle, wmState, (::Atom)4, 32, PropModeReplace, (unsigned char*)states.data(), states.size());
+    //register window in list
+    Platform::RegisterWindow(this);
 }
 
 crgwin::LinuxWindow::~LinuxWindow(){
-
+`
 }
 
-WindowHandle crgwin::LinuxWindow::GetNativeHandle() const {
-    return _handle;
+crgwin::WindowHandle crgwin::LinuxWindow::GetNativeHandle() const {
+    return (WindowHandle)_handle;
 }
 
 void crgwin::LinuxWindow::SetTitle(const std::string& title){
@@ -71,10 +73,19 @@ void crgwin::LinuxWindow::SetTitle(const std::string& title){
 }
 
 crgwin::ivec2 crgwin::LinuxWindow::GetWindowPos(){
-    return ivec2(0, 0);
+    X11Display* display = LinuxPlatform::GetDisplay();
+    if (!display)
+        return crgwin::ivec2(0, 0);
+	::XWindowAttributes xwa;
+	::XGetWindowAttributes(display, _handle, &xwa);
+	return crgwin::ivec2(xwa.x, xwa.y);
 }
 
 void crgwin::LinuxWindow::SetWindowPos(crgwin::ivec2 pos){
+
+}
+
+void crgwin::LinuxWindow::Resize(const crgwin::ivec2& size){
 
 }
 
@@ -105,11 +116,25 @@ void crgwin::LinuxWindow::Close(){
     X11Display* display = LinuxPlatform::GetDisplay();
     if(_handle && display){
         ::XDestroyWindow(display, _handle);
+        Platform::UnregisterWindow(this);
     }
 }
 
 void crgwin::LinuxWindow::Restore() {
 
+}
+
+void crgwin::LinuxWindow::ProcessEvent(void* pEvent){
+    ::XEvent* event = static_cast<::XEvent*>(event); 
+
+    switch (event->type)
+	{
+        case PropertyNotify : {
+            //if (event->xproperty.atom == xAtomWmState){
+
+            //}
+        }
+    }
 }
 
 #endif
