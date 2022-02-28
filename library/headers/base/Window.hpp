@@ -68,6 +68,7 @@ namespace crgwin {
 		EVENT_MOUSE_BTN_DOWN,
 		EVENT_MOUSE_BTN_UP,
 		EVENT_MOUSE_MOVED,
+		EVENT_MOUSE_WHEEL,
 		EVENT_STATE_CHANGED,
 		EVENT_SIZE_CHANGED,
 		EVENT_FOCUS_GAIN,
@@ -88,6 +89,7 @@ namespace crgwin {
 			crgMouseButton mouse_button;
 			WindowState state;
 			ivec2 coord;
+			int delta;
 		};
 	};
 

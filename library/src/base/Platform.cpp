@@ -10,7 +10,7 @@ void crgwin::Platform::RegisterWindow(Window* window) {
 }
 void crgwin::Platform::UnregisterWindow(Window* window) {
     if (GetByHandle(window->GetNativeHandle())) {
-        std::remove(windows.begin(), windows.end(), window);
+        auto it = std::remove(windows.begin(), windows.end(), window);
         windows.pop_back();
     }
 }

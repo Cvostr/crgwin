@@ -32,6 +32,29 @@ crgKeyCode GetKeyCode(WPARAM win_code) {
         return KEY_CODE_ESCAPE;
     case VK_RETURN:
         return KEY_CODE_ENTER;
+    case VK_CAPITAL:
+        return KEY_CODE_CAPS_LOCK;
+
+    case 0x30:
+        return KEY_CODE_0;
+    case 0x31:
+        return KEY_CODE_1;
+    case 0x32:
+        return KEY_CODE_2;
+    case 0x33:
+        return KEY_CODE_3;
+    case 0x34:
+        return KEY_CODE_4;
+    case 0x35:
+        return KEY_CODE_5;
+    case 0x36:
+        return KEY_CODE_6;
+    case 0x37:
+        return KEY_CODE_7;
+    case 0x38:
+        return KEY_CODE_8;
+    case 0x39:
+        return KEY_CODE_9;
 
     case VK_UP:
         return KEY_CODE_UP;
@@ -204,6 +227,19 @@ bool crgwin::Win32Window::WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam) {
     {
         r_event.type = WindowEventType::EVENT_MOUSE_BTN_UP;
         r_event.mouse_button = crgMouseButton::MOUSE_BUTTON_MIDDLE;
+        CallEvent(r_event);
+        result = true;
+        break;
+    }
+    case WM_MOUSEWHEEL: 
+    {
+        int delta = GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA;
+        int xpos = LOWORD(lParam);
+        int ypos = LOWORD(lParam);
+
+        r_event.type = WindowEventType::EVENT_MOUSE_WHEEL;
+        r_event.delta = delta;
+
         CallEvent(r_event);
         result = true;
         break;

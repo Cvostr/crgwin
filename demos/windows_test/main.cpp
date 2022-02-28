@@ -52,6 +52,9 @@ public:
 			if(event.state == crgwin::WindowState::STATE_MINIMIZED)
 				std::cout << "window minimized" << std::endl;
 		}
+		if (event.type == crgwin::WindowEventType::EVENT_MOUSE_WHEEL) {
+			std::cout << "mouse wheel " << event.delta << std::endl;
+		}
 		if (event.type == crgwin::WindowEventType::EVENT_CLOSED) {
 			std::cout << "window closed" << std::endl;
 			running = false;

@@ -27,6 +27,7 @@ set(HEADER
 			headers/base/CpuInfo.hpp
 			headers/base/MemoryInfo.hpp
 			headers/base/Mutex.hpp
+
 			headers/platforms/win32/Win32Window.hpp
 			headers/platforms/win32/Win32Utils.hpp
 			headers/platforms/win32/Win32Platform.hpp
