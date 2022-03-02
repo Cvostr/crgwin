@@ -16,6 +16,8 @@ set(SRC_FILES
 				src/platforms/linux/LinuxWindow.cpp
 				src/platforms/linux/LinuxPlatform.cpp
 				src/platforms/linux/LinuxMutex.cpp
+				src/platforms/linux/LinuxAtoms.cpp
+				src/platforms/linux/LinuxDialogBox.cpp
 
 				src/base/Window.cpp
 				src/base/Platform.cpp)
@@ -34,6 +36,7 @@ set(HEADER
 			headers/platforms/win32/Win32Utils.hpp
 			headers/platforms/win32/Win32Platform.hpp
 			
+			headers/platforms/linux/LinuxAtoms.hpp
 			headers/platforms/linux/LinuxWindow.hpp
 			headers/platforms/linux/LinuxPlatform.hpp)
 

@@ -40,8 +40,19 @@ crgwin::LinuxWindow::LinuxWindow(const WindowCreateInfo& create_info) : Window(c
 
     SetTitle(create_info.title);
 
+    long eventMask =
+			ExposureMask | FocusChangeMask |
+			KeyPressMask | KeyReleaseMask |
+			ButtonPressMask | ButtonReleaseMask |
+			EnterWindowMask | LeaveWindowMask |
+			VisibilityChangeMask | ExposureMask |
+			PointerMotionMask | ButtonMotionMask |
+			StructureNotifyMask | PropertyChangeMask;
+
+	::XSelectInput(display, _handle, eventMask);
+
     if(create_info.borderless){
-        
+
     }
 
     ::Atom wmState = ::XInternAtom(display, "_NET_WM_STATE", 0);
@@ -56,10 +67,14 @@ crgwin::LinuxWindow::LinuxWindow(const WindowCreateInfo& create_info) : Window(c
     ::XChangeProperty(display, _handle, wmState, (::Atom)4, 32, PropModeReplace, (unsigned char*)states.data(), states.size());
     //register window in list
     Platform::RegisterWindow(this);
+    //sync x11
+    ::XFlush(display);
+	::XSync(display, 0);
+	::XFree(visualInfo);
 }
 
 crgwin::LinuxWindow::~LinuxWindow(){
-`
+
 }
 
 crgwin::WindowHandle crgwin::LinuxWindow::GetNativeHandle() const {
@@ -124,11 +139,22 @@ void crgwin::LinuxWindow::Restore() {
 
 }
 
+void crgwin::LinuxWindow::SetResizeable(bool resizeable){
+
+}
+
+void crgwin::LinuxWindow::SetBorderless(bool borderless){
+
+}
+
 void crgwin::LinuxWindow::ProcessEvent(void* pEvent){
     ::XEvent* event = static_cast<::XEvent*>(event); 
 
     switch (event->type)
 	{
+        case ClientMessage : {
+            
+        }
         case PropertyNotify : {
             //if (event->xproperty.atom == xAtomWmState){
 

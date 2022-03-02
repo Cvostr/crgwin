@@ -12,6 +12,7 @@ public:
 		crgwin::WindowCreateInfo cr_info;
 		cr_info.title = "Sample тест";
 		cr_info.resize = false;
+		//cr_info.borderless = true;
 
 		win = crgwin::CreateWindow(cr_info);
 		win->Show();

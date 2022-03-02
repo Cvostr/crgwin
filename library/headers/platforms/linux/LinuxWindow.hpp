@@ -24,6 +24,10 @@ namespace crgwin {
 
 		void Resize(const crgwin::ivec2& size);
 
+		void SetResizeable(bool resizeable);
+
+		void SetBorderless(bool borderless);
+
 		void Show();
 
 		void Hide();
