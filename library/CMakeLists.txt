@@ -11,6 +11,7 @@ set(SRC_FILES
 				src/platforms/win32/Win32Platform.cpp
 				src/platforms/win32/Win32Input.cpp
 				src/platforms/win32/Win32Mutex.cpp
+				src/platforms/win32/Win32DialogBox.cpp
 
 				src/platforms/linux/LinuxWindow.cpp
 				src/platforms/linux/LinuxPlatform.cpp
@@ -26,6 +27,7 @@ set(HEADER
 			headers/base/BatteryInfo.hpp
 			headers/base/CpuInfo.hpp
 			headers/base/MemoryInfo.hpp
+			headers/base/DialogBox.hpp
 			headers/base/Mutex.hpp
 
 			headers/platforms/win32/Win32Window.hpp

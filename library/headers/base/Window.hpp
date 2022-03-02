@@ -168,9 +168,15 @@ namespace crgwin {
 		/// </summary>
 		/// <returns></returns>
 		bool IsFocused() const;
-
+		/// <summary>
+		/// Enables or disables window resize ability
+		/// </summary>
+		/// <param name="resizeable"></param>
 		virtual void SetResizeable(bool resizeable) = 0;
-
+		/// <summary>
+		/// enables or disables window borderless
+		/// </summary>
+		/// <param name="borderless"></param>
 		virtual void SetBorderless(bool borderless) = 0;
 		/// <summary>
 		/// Shows the window

@@ -34,6 +34,16 @@ crgKeyCode GetKeyCode(WPARAM win_code) {
         return KEY_CODE_ENTER;
     case VK_CAPITAL:
         return KEY_CODE_CAPS_LOCK;
+    case VK_HOME:
+        return KEY_CODE_HOME;
+    case VK_END:
+        return KEY_CODE_END;
+    case VK_INSERT:
+        return KEY_CODE_INSERT;
+    case VK_PRIOR:
+        return KEY_CODE_PAGEUP;
+    case VK_NEXT:
+        return KEY_CODE_PAGEDOWN;
 
     case 0x30:
         return KEY_CODE_0;

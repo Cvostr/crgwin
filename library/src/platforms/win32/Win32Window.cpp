@@ -122,14 +122,17 @@ LRESULT Win32Window::WndProc(UINT msg, WPARAM wParam, LPARAM lParam) {
             //on size restored
             if (_resizing) {
                 //window resized by user
-                r_event.type = WindowEventType::EVENT_SIZE_CHANGED;
-                CallEvent(r_event);
-                UpdateClientSize();
+                
             }
             else {
                 //window resized by API
                 
             }
+            //update client size variable
+            UpdateClientSize();
+            //raise resize event
+            r_event.type = WindowEventType::EVENT_SIZE_CHANGED;
+            CallEvent(r_event);
         }
         break;
     }
@@ -224,7 +227,7 @@ void Win32Window::Resize(const crgwin::ivec2& size) {
 void Win32Window::SetResizeable(bool resizeable) {
     if (win32_handle) {
         _create_info.resize = resizeable;
-        SetWindowLongPtr(win32_handle, GWL_STYLE, GetWin32Style());
+        ::SetWindowLongPtrW(win32_handle, GWL_STYLE, GetWin32Style());
         ::ShowWindow(win32_handle, SW_SHOW);
     }
 }
@@ -232,9 +235,13 @@ void Win32Window::SetResizeable(bool resizeable) {
 void Win32Window::SetBorderless(bool borderless) {
     if (win32_handle) {
         _create_info.borderless = borderless;
-        SetWindowLongPtr(win32_handle, GWL_STYLE, GetWin32Style());
-        SetWindowLongPtr(win32_handle, GWL_EXSTYLE, GetWin32ExStyle());
+        //update styles
+        ::SetWindowLongPtrW(win32_handle, GWL_STYLE, GetWin32Style());
+        ::SetWindowLongPtrW(win32_handle, GWL_EXSTYLE, GetWin32ExStyle());
+        //show window
         ::ShowWindow(win32_handle, SW_SHOW);
+        //recalculate client size
+        Resize(_client_size);
     }
 }
 
