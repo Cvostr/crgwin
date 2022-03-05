@@ -9,6 +9,7 @@
 #include <X11/Xatom.h>
 #include <X11/XKBlib.h>
 #include <X11/Xresource.h>
+#include <platforms/linux/LinuxAtoms.hpp>
 
 crgwin::LinuxWindow::LinuxWindow(const WindowCreateInfo& create_info) : Window(create_info) {
     auto display = LinuxPlatform::GetDisplay();
@@ -50,6 +51,8 @@ crgwin::LinuxWindow::LinuxWindow(const WindowCreateInfo& create_info) : Window(c
 			StructureNotifyMask | PropertyChangeMask;
 
 	::XSelectInput(display, _handle, eventMask);
+
+    ::XSetWMProtocols(display, _handle, &GetDeleteWindowAtom(), 1);
 
     if(create_info.borderless){
 
@@ -148,13 +151,38 @@ void crgwin::LinuxWindow::SetBorderless(bool borderless){
 }
 
 void crgwin::LinuxWindow::ProcessEvent(void* pEvent){
-    ::XEvent* event = static_cast<::XEvent*>(event); 
-
+    ::XEvent* event = static_cast<::XEvent*>(pEvent); 
+    WindowEvent r_event;
     switch (event->type)
 	{
         case ClientMessage : {
-            
+            if ((::Atom)event->xclient.data.l[0] == GetDeleteWindowAtom()){
+                Close();
+                r_event.type = WindowEventType::EVENT_CLOSED;
+                CallEvent(r_event);
+            }
+            break;
         }
+        case FocusIn:
+                //update flag
+                _focused = true;
+				// Update input context focus
+				::XSetICFocus(LinuxPlatform::GetIC());
+                //raise event
+                r_event.type = WindowEventType::EVENT_FOCUS_GAIN;
+                CallEvent(r_event);
+                break;
+        case FocusOut:
+                //update flag
+                _focused = false;
+				// Update input context focus
+				::XUnsetICFocus(LinuxPlatform::GetIC());
+                //raise event
+                r_event.type = WindowEventType::EVENT_FOCUS_LOST;
+                CallEvent(r_event);
+                break;
+                
+				
         case PropertyNotify : {
             //if (event->xproperty.atom == xAtomWmState){
 

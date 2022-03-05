@@ -5,6 +5,7 @@
 struct _XDisplay;
 typedef struct _XDisplay X11Display;
 typedef unsigned long X11Window;
+typedef struct _XIC *XIC;
 
 namespace crgwin{
     class LinuxPlatform : public Platform{
@@ -16,6 +17,6 @@ namespace crgwin{
 
         static X11Display* GetDisplay();
 
-
+        static XIC GetIC();
     };
 }

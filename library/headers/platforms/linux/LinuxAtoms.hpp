@@ -7,5 +7,5 @@ namespace crgwin{
 
     void InitAtoms();
 
-    ::Atom GetDeleteWindowAtom();
+    ::Atom& GetDeleteWindowAtom();
 }

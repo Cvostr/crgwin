@@ -9,17 +9,33 @@
 #include <X11/Xatom.h>
 #include <X11/XKBlib.h>
 #include <X11/Xresource.h>
+#include <platforms/linux/LinuxAtoms.hpp>
 
 X11Display* x11_display = nullptr;
+XIM IM = nullptr;
+XIC IC = nullptr;
 
 void crgwin::LinuxPlatform::Init(){
     ::XInitThreads();
     //opening display
     x11_display = ::XOpenDisplay(nullptr);
+
+    if (::XSupportsLocale())
+	{
+		::XSetLocaleModifiers("@im=none");
+		IM = ::XOpenIM(x11_display, nullptr, nullptr, nullptr);
+		IC = ::XCreateIC(IM, XNInputStyle, XIMPreeditNothing | XIMStatusNothing, nullptr);
+	}
+
+    InitAtoms();
 }
 
 X11Display* crgwin::LinuxPlatform::GetDisplay(){
     return x11_display;
+}
+
+XIC crgwin::LinuxPlatform::GetIC(){
+    return IC;
 }
 
 void crgwin::LinuxPlatform::Tick(){
