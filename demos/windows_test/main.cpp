@@ -52,6 +52,7 @@ public:
 				desc.extensions.push_back(crgwin::FileExtensionDesc("Log file", "*.log"));
 				desc.extensions.push_back(crgwin::FileExtensionDesc());
 				desc.baseFileName = "test.txt";
+				desc.initialDir = "c:\\Users";
 				std::string result;
 				crgwin::OpenFileDialog(&desc, result, win);
 			}

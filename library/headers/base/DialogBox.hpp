@@ -56,13 +56,11 @@ namespace crgwin {
         std::string dialogTitle;
         std::vector<FileExtensionDesc> extensions;
         std::string baseFileName;
-
-        std::string acceptBtnText;
-        std::string cancelBtnText;
+        std::string initialDir;
     };
 
     void OpenFileDialog(FileDialogDesc* desc, std::string& result, Window* win);
-    void SaveFileDialog(FileDialogDesc* desc, std::string& result);
+    void SaveFileDialog(FileDialogDesc* desc, std::string& result, Window* win);
     void MessageDialog(MessageDialogDesc* desc, DialogUserAction& action, Window* win);
 
 }
