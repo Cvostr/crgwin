@@ -7,6 +7,12 @@ namespace crgwin {
 	class LinuxWindow : public Window {
 	private:
 		X11Window _handle;
+
+		bool IsMapped();
+
+		void Minimize(bool dir);
+
+		void Maximize(bool dir);
 	public:
 		LinuxWindow(const WindowCreateInfo& create_info);
 

@@ -42,6 +42,7 @@ void crgwin::InitAtoms(){
     xAtomXdndSelection = ::XInternAtom(display, "XdndSelection", 0);
     xAtomXdndFinished = ::XInternAtom(display, "XdndFinished", 0);
     xAtomXdndAware = ::XInternAtom(display, "XdndAware", 0);
+    xAtomWmState = ::XInternAtom(display, "_NET_WM_STATE", 1);
 	xAtomWmStateHidden = ::XInternAtom(display, "_NET_WM_STATE_HIDDEN", 0);
 	xAtomWmStateMaxHorz = ::XInternAtom(display, "_NET_WM_STATE_MAXIMIZED_HORZ", 0);
 	xAtomWmStateMaxVert = ::XInternAtom(display, "_NET_WM_STATE_MAXIMIZED_VERT", 0);
@@ -52,6 +53,22 @@ void crgwin::InitAtoms(){
 
 ::Atom& crgwin::GetDeleteWindowAtom(){
     return xAtomDeleteWindow;
+}
+
+::Atom crgwin::GetWmStateAtom(){
+    return xAtomWmState;
+}
+
+::Atom crgwin::GetWmStateMaxHorzAtom(){
+    return xAtomWmStateMaxHorz;
+}
+
+::Atom crgwin::GetWmStateMaxVertAtom(){
+    return xAtomWmStateMaxVert;
+}
+
+::Atom crgwin::GetWmStateHiddenAtom(){
+    return xAtomWmStateHidden;
 }
 
 #endif

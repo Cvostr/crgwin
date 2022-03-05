@@ -11,6 +11,10 @@
 #include <X11/Xresource.h>
 #include <platforms/linux/LinuxAtoms.hpp>
 
+#define _NET_WM_STATE_REMOVE 0L // remove/unset property
+#define _NET_WM_STATE_ADD 1L // add/set property
+#define _NET_WM_STATE_TOGGLE 2L // toggle property
+
 crgwin::LinuxWindow::LinuxWindow(const WindowCreateInfo& create_info) : Window(create_info) {
     auto display = LinuxPlatform::GetDisplay();
     if (!display)
@@ -80,6 +84,16 @@ crgwin::LinuxWindow::~LinuxWindow(){
 
 }
 
+bool crgwin::LinuxWindow::IsMapped(){
+    X11Display* display = LinuxPlatform::GetDisplay();
+    if (!display || !_handle){
+        return false;
+    }
+    ::XWindowAttributes xwa;
+	::XGetWindowAttributes(display, _handle, &xwa);
+	return xwa.map_state != IsUnmapped;
+}
+
 crgwin::WindowHandle crgwin::LinuxWindow::GetNativeHandle() const {
     return (WindowHandle)_handle;
 }
@@ -122,12 +136,62 @@ void crgwin::LinuxWindow::Hide(){
     }
 }
 
-void crgwin::LinuxWindow::Minimize(){
+#define X11_DefaultRootWindow(dpy) (((&((::_XPrivDisplay)(dpy))->screens[(((::_XPrivDisplay)(dpy))->default_screen)]))->root)
 
+void crgwin::LinuxWindow::Minimize(bool dir){
+    X11Display* display = LinuxPlatform::GetDisplay();
+    if(_handle && display){
+        ::Atom wmChange = ::XInternAtom(display, "WM_CHANGE_STATE", 0);
+        ::XEvent event = {};
+        event.type = ClientMessage;
+        event.xclient.window = _handle;
+        event.xclient.message_type = wmChange;
+        event.xclient.format = 32;
+        event.xclient.data.l[0] = dir ? 3L : 1L; //minimized state
+
+        XSendEvent(display, X11_DefaultRootWindow(display), 0, SubstructureRedirectMask | SubstructureNotifyMask, &event);
+        if(dir)
+            _state = WindowState::STATE_MINIMIZED;
+    }
+}
+
+void crgwin::LinuxWindow::Maximize(bool dir){
+    X11Display* display = LinuxPlatform::GetDisplay();
+    if(_handle && display){
+        ::Atom wmState = ::XInternAtom(display, "_NET_WM_STATE", 0);
+	    ::Atom wmMaxHorz = ::XInternAtom(display, "_NET_WM_STATE_MAXIMIZED_HORZ", 0);
+	    ::Atom wmMaxVert = ::XInternAtom(display, "_NET_WM_STATE_MAXIMIZED_VERT", 0);
+
+        bool mapped = IsMapped();
+        if (mapped){
+            ::XEvent event = {};
+            event.type = ClientMessage;
+            event.xclient.window = _handle;
+            event.xclient.message_type = wmState;
+            event.xclient.format = 32;
+            event.xclient.data.l[0] = dir ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
+            event.xclient.data.l[1] = wmMaxHorz;
+            event.xclient.data.l[2] = wmMaxVert;
+
+		    XSendEvent(display, X11_DefaultRootWindow(display), 0, SubstructureRedirectMask | SubstructureNotifyMask, &event);
+        }else{
+            ::Atom states[2];
+            states[0] = wmMaxVert;
+            states[1] = wmMaxHorz;
+            ::XChangeProperty(display, _handle, wmState, (::Atom)4, 32, PropModeReplace, (unsigned char*)states, 2);
+        }
+
+        if(dir)
+            _state = WindowState::STATE_MAXIMIZED;
+    }
+}
+
+void crgwin::LinuxWindow::Minimize(){
+    Minimize(true);
 }
 
 void crgwin::LinuxWindow::Maximize(){
-
+    Maximize(true);
 }
 
 void crgwin::LinuxWindow::Close(){
@@ -187,9 +251,50 @@ void crgwin::LinuxWindow::ProcessEvent(void* pEvent){
                 
 				
         case PropertyNotify : {
-            //if (event->xproperty.atom == xAtomWmState){
-
-            //}
+            if (event->xproperty.atom == GetWmStateAtom()){
+                ::Atom type;
+				int format;
+				unsigned long count, bytesRemaining;
+				unsigned char* data = nullptr;
+                X11Display* display = LinuxPlatform::GetDisplay();
+				const int result = ::XGetWindowProperty(display, event->xproperty.window, GetWmStateAtom(), 0, 1024, 0, AnyPropertyType, &type, &format, &count, &bytesRemaining, &data);
+				if (result == Success){
+                    ::Atom* atoms = (::Atom*)data;
+                    bool foundHorz = false;
+					bool foundVert = false;
+                    for (unsigned long i = 0; i < count; i++){
+                        if (atoms[i] == GetWmStateMaxHorzAtom())
+							foundHorz = true;
+						if (atoms[i] == GetWmStateMaxVertAtom())
+							foundVert = true;
+                        if (foundVert && foundHorz){
+                            if (event->xproperty.state == PropertyNewValue){
+                                if(_state != WindowState::STATE_MAXIMIZED){
+                                    _state = WindowState::STATE_MAXIMIZED;
+                                    r_event.type = WindowEventType::EVENT_STATE_CHANGED;
+                                    r_event.state = WindowState::STATE_MAXIMIZED;
+                                    CallEvent(r_event);
+                                }
+							}
+                        } else if (atoms[i] == GetWmStateHiddenAtom()){
+                            if (event->xproperty.state == PropertyNewValue){
+                                if(_state != WindowState::STATE_MINIMIZED){
+                                    _state = WindowState::STATE_MINIMIZED;
+                                    r_event.type = WindowEventType::EVENT_STATE_CHANGED;
+                                    r_event.state = WindowState::STATE_MINIMIZED;
+                                    CallEvent(r_event);
+                                }
+							}
+                        } else {
+							// Restored
+							_state = WindowState::STATE_DEFAULT;
+                            r_event.type = WindowEventType::EVENT_MOUSE_WHEEL;
+                            CallEvent(r_event);
+						}
+                    }
+                }
+            }
+            break;
         }
     }
 }

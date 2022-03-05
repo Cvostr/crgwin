@@ -8,4 +8,12 @@ namespace crgwin{
     void InitAtoms();
 
     ::Atom& GetDeleteWindowAtom();
+
+    ::Atom GetWmStateAtom();
+
+    ::Atom GetWmStateMaxHorzAtom();
+
+    ::Atom GetWmStateMaxVertAtom();
+
+    ::Atom GetWmStateHiddenAtom();
 }

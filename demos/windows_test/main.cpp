@@ -64,7 +64,7 @@ public:
 			std::cout << "mouse btn up " << event.mouse_button  << std::endl;
 		}
 		if (event.type == crgwin::WindowEventType::EVENT_MOUSE_MOVED) {
-			std::cout << "mouse moved " << event.coord.x << " " << event.coord.y << std::endl;
+			//std::cout << "mouse moved " << event.coord.x << " " << event.coord.y << std::endl;
 		}
 		if (event.type == crgwin::WindowEventType::EVENT_FOCUS_GAIN) {
 			std::cout << "focus gained" << std::endl;
@@ -79,6 +79,8 @@ public:
 		if (event.type == crgwin::WindowEventType::EVENT_STATE_CHANGED) {
 			if(event.state == crgwin::WindowState::STATE_MINIMIZED)
 				std::cout << "window minimized" << std::endl;
+			if(event.state == crgwin::WindowState::STATE_MAXIMIZED)
+				std::cout << "window maximized" << std::endl;
 		}
 		if (event.type == crgwin::WindowEventType::EVENT_MOUSE_WHEEL) {
 			std::cout << "mouse wheel " << event.delta << std::endl;
