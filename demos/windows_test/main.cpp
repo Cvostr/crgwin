@@ -57,6 +57,12 @@ public:
 				crgwin::OpenFileDialog(&desc, result, win);
 			}
 		}
+		if (event.type == crgwin::WindowEventType::EVENT_MOUSE_BTN_DOWN) {
+			std::cout << "mouse btn down " << event.mouse_button  << std::endl;
+		}
+		if (event.type == crgwin::WindowEventType::EVENT_MOUSE_BTN_UP) {
+			std::cout << "mouse btn up " << event.mouse_button  << std::endl;
+		}
 		if (event.type == crgwin::WindowEventType::EVENT_MOUSE_MOVED) {
 			//std::cout << "mouse moved " << event.coord.x << " " << event.coord.y << std::endl;
 		}

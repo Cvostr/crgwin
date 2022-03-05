@@ -1,7 +1,7 @@
+#ifdef __linux__
+
 #include <platforms/linux/LinuxWindow.hpp>
 #include <vector>
-
-#ifdef __linux__
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -153,6 +153,9 @@ void crgwin::LinuxWindow::SetBorderless(bool borderless){
 void crgwin::LinuxWindow::ProcessEvent(void* pEvent){
     ::XEvent* event = static_cast<::XEvent*>(pEvent); 
     WindowEvent r_event;
+
+    ProcessInputEvents(pEvent);
+
     switch (event->type)
 	{
         case ClientMessage : {

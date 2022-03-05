@@ -14,6 +14,8 @@ namespace crgwin {
 
 		void ProcessEvent(void* pEvent);
 
+		void ProcessInputEvents(void* pEvent);
+
 		WindowHandle GetNativeHandle() const;
 
 		void SetTitle(const std::string& title);

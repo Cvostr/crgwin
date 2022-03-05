@@ -16,6 +16,7 @@ set(SRC_FILES
 
 				src/platforms/linux/LinuxWindow.cpp
 				src/platforms/linux/LinuxPlatform.cpp
+				src/platforms/linux/LinuxInput.cpp
 				src/platforms/linux/LinuxMutex.cpp
 				src/platforms/linux/LinuxAtoms.cpp
 				src/platforms/linux/LinuxDialogBox.cpp
