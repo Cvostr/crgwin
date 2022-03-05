@@ -63,6 +63,12 @@ void crgwin::LinuxWindow::ProcessInputEvents(void* pEvent){
             CallEvent(r_event);
             //&event.xkey
 			break;
+        case MotionNotify:
+			//window->OnMotionNotify(&event.xmotion);
+            r_event.type = WindowEventType::EVENT_MOUSE_MOVED;
+            r_event.coord = crgwin::ivec2(event->xmotion.x, event->xmotion.y);
+            CallEvent(r_event);
+            break;
 
     }
 }
