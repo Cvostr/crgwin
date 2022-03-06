@@ -62,6 +62,11 @@ crgwin::LinuxWindow::LinuxWindow(const WindowCreateInfo& create_info) : Window(c
 
     }
 
+    if(!create_info.resize){
+        //block resizing
+        SetSizeHints(create_info.size, create_info.size);
+    }
+
     ::Atom wmState = ::XInternAtom(display, "_NET_WM_STATE", 0);
     std::vector<::Atom> states;
 	
@@ -94,6 +99,19 @@ bool crgwin::LinuxWindow::IsMapped(){
 	return xwa.map_state != IsUnmapped;
 }
 
+void crgwin::LinuxWindow::SetSizeHints(crgwin::ivec2 min, crgwin::ivec2 max){
+    X11Display* display = LinuxPlatform::GetDisplay();
+    if(_handle && display){
+        ::XSizeHints hints;
+		hints.flags = PMinSize | PMaxSize;
+		hints.min_height = min.y;
+		hints.max_height = max.y;
+		hints.min_width = min.x;
+		hints.max_width = max.x;
+		::XSetNormalHints(display, _handle, &hints);
+    }
+}
+
 crgwin::WindowHandle crgwin::LinuxWindow::GetNativeHandle() const {
     return (WindowHandle)_handle;
 }
@@ -114,11 +132,27 @@ crgwin::ivec2 crgwin::LinuxWindow::GetWindowPos(){
 }
 
 void crgwin::LinuxWindow::SetWindowPos(crgwin::ivec2 pos){
-
+    X11Display* display = LinuxPlatform::GetDisplay();
+    if(_handle && display){
+        ::XMoveWindow(display, _handle, pos.x, pos.y);
+	    ::XFlush(display);
+    }
 }
 
 void crgwin::LinuxWindow::Resize(const crgwin::ivec2& size){
+    X11Display* display = LinuxPlatform::GetDisplay();
+    if(_handle && display){
+        ivec2 old_pos = GetWindowPos();
+        _client_size = size;
 
+        if(!_create_info.resize){
+            SetSizeHints(size, size);
+        }
+
+	    ::XResizeWindow(display, _handle, size.x, size.y);
+	    ::XMoveWindow(display, _handle, old_pos.x, old_pos.y);
+	    ::XFlush(display);
+    }
 }
 
 void crgwin::LinuxWindow::Show(){

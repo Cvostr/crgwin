@@ -13,6 +13,8 @@ namespace crgwin {
 		void Minimize(bool dir);
 
 		void Maximize(bool dir);
+
+		void SetSizeHints(crgwin::ivec2 min, crgwin::ivec2 max);
 	public:
 		LinuxWindow(const WindowCreateInfo& create_info);
 
