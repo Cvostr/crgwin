@@ -27,6 +27,8 @@ void crgwin::Win32Platform::RegisterWindowClass() {
     {
         //error registering window class
     }
+
+    InitKeyCodes();
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)

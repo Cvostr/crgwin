@@ -21,6 +21,7 @@ set(SRC_FILES
 				src/platforms/linux/LinuxAtoms.cpp
 				src/platforms/linux/LinuxDialogBox.cpp
 
+				src/platforms/PlatformKeyMap.cpp
 				src/base/Window.cpp
 				src/base/Platform.cpp)
 

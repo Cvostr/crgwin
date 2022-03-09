@@ -4,158 +4,47 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <windowsx.h>
+#include "platforms/PlatformKeyMap.hpp"
+
+static crgwin::PlatformKeyMappings win32_mappings;
 
 crgKeyCode GetKeyCode(WPARAM win_code) {
-    switch (win_code) {
-    case VK_CONTROL:
-    case VK_LCONTROL:
-        return KEY_CODE_LCTRL;
-    case VK_RCONTROL:
-        return KEY_CODE_RCTRL;
-    case VK_TAB:
-        return KEY_CODE_TAB;
-    case VK_SHIFT:
-    case VK_LSHIFT:
-        return KEY_CODE_LSHIFT;
-    case VK_RSHIFT:
-        return KEY_CODE_RSHIFT;
-    case VK_MENU:
-    case VK_LMENU:
-        return KEY_CODE_LALT;
-    case VK_RMENU:
-        return KEY_CODE_RALT;
-    case VK_BACK:
-        return KEY_CODE_BACKSPACE;
-    case VK_SPACE:
-        return KEY_CODE_SPACE;
-    case VK_ESCAPE:
-        return KEY_CODE_ESCAPE;
-    case VK_RETURN:
-        return KEY_CODE_ENTER;
-    case VK_CAPITAL:
-        return KEY_CODE_CAPS_LOCK;
-    case VK_HOME:
-        return KEY_CODE_HOME;
-    case VK_END:
-        return KEY_CODE_END;
-    case VK_INSERT:
-        return KEY_CODE_INSERT;
-    case VK_PRIOR:
-        return KEY_CODE_PAGEUP;
-    case VK_NEXT:
-        return KEY_CODE_PAGEDOWN;
+    return win32_mappings.GetKeyMapping(win_code);
+}
 
-    case 0x30:
-        return KEY_CODE_0;
-    case 0x31:
-        return KEY_CODE_1;
-    case 0x32:
-        return KEY_CODE_2;
-    case 0x33:
-        return KEY_CODE_3;
-    case 0x34:
-        return KEY_CODE_4;
-    case 0x35:
-        return KEY_CODE_5;
-    case 0x36:
-        return KEY_CODE_6;
-    case 0x37:
-        return KEY_CODE_7;
-    case 0x38:
-        return KEY_CODE_8;
-    case 0x39:
-        return KEY_CODE_9;
+void crgwin::InitKeyCodes() {
+    crgwin::KeyMappingPair mappings[] = 
+    { {0x41, KEY_CODE_A}, {0x42, KEY_CODE_B}, {0x43, KEY_CODE_C},
+      {0x44, KEY_CODE_D}, {0x45, KEY_CODE_E}, {0x46, KEY_CODE_F},
+      {0x47, KEY_CODE_G}, {0x48, KEY_CODE_H}, {0x49, KEY_CODE_I},
+      {0x4A, KEY_CODE_J}, {0x4B, KEY_CODE_K}, {0x4C, KEY_CODE_L}, 
+      {0x4D, KEY_CODE_M}, {0x4E, KEY_CODE_N}, {0x4F, KEY_CODE_O},
+      {0x50, KEY_CODE_P}, {0x51, KEY_CODE_Q}, {0x52, KEY_CODE_R},
+      {0x53, KEY_CODE_S}, {0x54, KEY_CODE_T}, {0x55, KEY_CODE_U},
+      {0x56, KEY_CODE_V}, {0x57, KEY_CODE_W}, {0x58, KEY_CODE_X}, 
+      {0x59, KEY_CODE_Y}, {0x5A, KEY_CODE_Z},
+      {VK_F1, KEY_CODE_F1}, {VK_F2, KEY_CODE_F2}, {VK_F3, KEY_CODE_F3},
+      {VK_F4, KEY_CODE_F4}, {VK_F5, KEY_CODE_F5}, {VK_F6, KEY_CODE_F6},
+      {VK_F7, KEY_CODE_F7}, {VK_F8, KEY_CODE_F8}, {VK_F9, KEY_CODE_F9},
+      {VK_F10, KEY_CODE_F10}, {VK_F11, KEY_CODE_F11}, {VK_F12, KEY_CODE_F12},
+      {VK_UP, KEY_CODE_UP}, {VK_DOWN, KEY_CODE_DOWN}, {VK_LEFT, KEY_CODE_LEFT}, {VK_RIGHT, KEY_CODE_RIGHT},
+       
+      {0x30, KEY_CODE_0}, {0x31, KEY_CODE_1}, {0x32, KEY_CODE_2},
+      {0x33, KEY_CODE_3}, {0x34, KEY_CODE_4}, {0x35, KEY_CODE_5},
+      {0x36, KEY_CODE_6}, {0x37, KEY_CODE_7}, {0x38, KEY_CODE_8}, {0x39, KEY_CODE_9},
 
-    case VK_UP:
-        return KEY_CODE_UP;
-    case VK_DOWN:
-        return KEY_CODE_DOWN;
-    case VK_LEFT:
-        return KEY_CODE_LEFT;
-    case VK_RIGHT:
-        return KEY_CODE_RIGHT;
-    case VK_DELETE:
-        return KEY_CODE_DELETE;
+      {VK_DELETE, KEY_CODE_DELETE}, {VK_NEXT, KEY_CODE_PAGEDOWN}, {VK_PRIOR, KEY_CODE_PAGEUP},
+      {VK_INSERT, KEY_CODE_INSERT}, {VK_HOME, KEY_CODE_HOME}, {VK_END, KEY_CODE_END},
+      {VK_RETURN, KEY_CODE_ENTER}, {VK_CAPITAL, KEY_CODE_CAPS_LOCK}, {VK_ESCAPE, KEY_CODE_ESCAPE},
+      {VK_SPACE, KEY_CODE_SPACE}, {VK_BACK, KEY_CODE_BACKSPACE}, {VK_TAB, KEY_CODE_TAB},
 
-    case VK_F1:
-        return KEY_CODE_F1;
-    case VK_F2:
-        return KEY_CODE_F2;
-    case VK_F3:
-        return KEY_CODE_F3;
-    case VK_F4:
-        return KEY_CODE_F4;
-    case VK_F5:
-        return KEY_CODE_F5;
-    case VK_F6:
-        return KEY_CODE_F6;
-    case VK_F7:
-        return KEY_CODE_F7;
-    case VK_F8:
-        return KEY_CODE_F8;
-    case VK_F9:
-        return KEY_CODE_F9;
-    case VK_F10:
-        return KEY_CODE_F10;
-    case VK_F11:
-        return KEY_CODE_F11;
-    case VK_F12:
-        return KEY_CODE_F12;
+      {VK_CONTROL, KEY_CODE_LCTRL}, {VK_LCONTROL, KEY_CODE_LCTRL}, {VK_RCONTROL, KEY_CODE_RCTRL},
+      {VK_SHIFT, KEY_CODE_LSHIFT}, {VK_LSHIFT, KEY_CODE_LSHIFT}, {VK_RSHIFT, KEY_CODE_RSHIFT},
+      {VK_MENU, KEY_CODE_LALT}, {VK_LMENU, KEY_CODE_LALT}, {VK_RMENU, KEY_CODE_RALT}
+    };
 
-    case 0x41:
-        return KEY_CODE_A;
-    case 0x42:
-        return KEY_CODE_B;
-    case 0x43:
-        return KEY_CODE_C;
-    case 0x44:
-        return KEY_CODE_D;
-    case 0x45:
-        return KEY_CODE_E;
-    case 0x46:
-        return KEY_CODE_F;
-    case 0x47:
-        return KEY_CODE_G;
-    case 0x48:
-        return KEY_CODE_H;
-    case 0x49:
-        return KEY_CODE_I;
-    case 0x4A:
-        return KEY_CODE_J;
-    case 0x4B:
-        return KEY_CODE_K;
-    case 0x4C:
-        return KEY_CODE_L;
-    case 0x4D:
-        return KEY_CODE_M;
-    case 0x4E:
-        return KEY_CODE_N;
-    case 0x4F:
-        return KEY_CODE_O;
-    case 0x50:
-        return KEY_CODE_P;
-    case 0x51:
-        return KEY_CODE_Q;
-    case 0x52:
-        return KEY_CODE_R;
-    case 0x53:
-        return KEY_CODE_S;
-    case 0x54:
-        return KEY_CODE_T;
-    case 0x55:
-        return KEY_CODE_U;
-    case 0x56:
-        return KEY_CODE_V;
-    case 0x57:
-        return KEY_CODE_W;
-    case 0x58:
-        return KEY_CODE_X;
-    case 0x59:
-        return KEY_CODE_Y;
-    case 0x5A:
-        return KEY_CODE_Z;
-    }
-    return (crgKeyCode)0;
+    win32_mappings.AddKeyMappings(mappings, sizeof(mappings) / sizeof(crgwin::KeyMappingPair));
+
 }
 
 bool crgwin::Win32Window::WndProcInput(UINT msg, WPARAM wParam, LPARAM lParam) {

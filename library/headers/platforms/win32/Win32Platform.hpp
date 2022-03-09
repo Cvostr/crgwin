@@ -34,4 +34,6 @@ namespace crgwin {
 		static void RegisterWindowClass();
 		static void Tick();
 	};
+
+	void InitKeyCodes();
 }
